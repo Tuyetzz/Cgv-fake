@@ -46,13 +46,15 @@ public class MovieTicketBookingApp {
 
         // Tạo JSplitPane để chia màn hình thành hai bên
         JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, moviePanelLeft, moviePanelRight);
-        splitPane.setDividerLocation(400); // Điều chỉnh vị trí chia màn hình
+        splitPane.setDividerLocation(500); // Điều chỉnh vị trí chia màn hình
         splitPane.setAlignmentX(Component.CENTER_ALIGNMENT);
         // Thêm JSplitPane vào cửa sổ chính
         frame.add(splitPane);
 
         // Hiển thị cửa sổ
         frame.setVisible(true);
+        frame.setResizable(false);
+
     }
 
     // Lớp để tạo một ô hình chữ nhật chứa thông tin về phim và hình ảnh
