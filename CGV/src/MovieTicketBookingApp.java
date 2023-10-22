@@ -3,22 +3,23 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import javax.imageio.ImageIO;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
 
 public class MovieTicketBookingApp {
 
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> createAndShowGUI());
-    }
-
-    private static void createAndShowGUI() {
+    public void createAndShowGUI() {
         // Tạo cửa sổ chính
         JFrame frame = new JFrame("CGV Cinema");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(800, 400); // Kích thước lớn hơn để chứa 8 ô phim
+        frame.setSize(1000, 700); // Kích thước lớn hơn để chứa 8 ô phim
 
         // Tạo JPanel để chứa các phim với GridLayout
         JPanel moviePanelLeft = new JPanel(new GridLayout(0, 1)); // 1 cột, số hàng tùy ý
         JPanel moviePanelRight = new JPanel(new GridLayout(0, 1)); // 1 cột, số hàng tùy ý
+
+
 
         // Tạo 8 ô hình chữ nhật chứa thông tin về các phim
         MovieInfoPanel movie1 = new MovieInfoPanel("Phim 1", "1 giờ 30 phút", "Hành động", "10:00 AM", "img/conan.jpg", 200, 250);
@@ -55,7 +56,7 @@ public class MovieTicketBookingApp {
     }
 
     // Lớp để tạo một ô hình chữ nhật chứa thông tin về phim và hình ảnh
-    static class MovieInfoPanel extends JPanel {
+    public class MovieInfoPanel extends JPanel {
         public MovieInfoPanel(String title, String duration, String genre, String showtime, String imagePath, int targetWidth, int targetHeight) {
             setLayout(new BoxLayout(this, BoxLayout.LINE_AXIS));
             setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
@@ -75,10 +76,23 @@ public class MovieTicketBookingApp {
             JButton bookTicketButton = new JButton("Đặt vé");
             bookTicketButton.setAlignmentX(Component.CENTER_ALIGNMENT);
 
+            // Add action listener to the button
+            bookTicketButton.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    // Create an instance of CinemaTicketBookingApp
+                    CinemaTicketBookingApp d = new CinemaTicketBookingApp();
+                    // Call a method or perform any action on the CinemaTicketBookingApp instance
+                    // Example: d.someMethod();
+                    closeCurrentFrame();
+                }
+            });
+
+
             add(imageLabel);
-            add(Box.createRigidArea(new Dimension(0, 10)); // Khoảng cách giữa hình ảnh và thông tin
+            add(Box.createRigidArea(new Dimension(0, 10))); // Khoảng cách giữa hình ảnh và thông tin
             add(movieInfoLabel);
-            add(Box.createRigidArea(new Dimension(0, 10)); // Khoảng cách giữa thông tin và nút
+            add(Box.createRigidArea(new Dimension(0, 10))); // Khoảng cách giữa thông tin và nút
             add(bookTicketButton);
         }
 
@@ -103,6 +117,12 @@ public class MovieTicketBookingApp {
             } catch (Exception e) {
                 e.printStackTrace();
                 return null;
+            }
+        }
+        private void closeCurrentFrame() {
+            Window window = SwingUtilities.getWindowAncestor(this);
+            if (window instanceof JFrame) {
+                ((JFrame) window).dispose();
             }
         }
     }
