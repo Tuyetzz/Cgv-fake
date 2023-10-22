@@ -5,6 +5,7 @@ import java.awt.*;
 import java.awt.Color;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.image.BufferedImage;
 
 import java.util.*;
 import java.util.Scanner;
@@ -21,11 +22,18 @@ import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JButton;
 
+import javax.imageio.ImageIO;
+
 //import java.math.BigInteger;
 //import java.util.Stack;
 
 public class Main {
     public static void main(String[] args) {
-        new CinemaTicketBookingApp();
+        SwingUtilities.invokeLater(() -> {
+            MovieTicketBookingApp c = new MovieTicketBookingApp();
+            c.createAndShowGUI();
+        });
+
+
     }
 }
