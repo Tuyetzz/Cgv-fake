@@ -2,10 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
- */
+//package com.mycompany.netbeanstest2;
 import java.awt.*;
 import java.awt.Color;
 import java.awt.event.ActionListener;
@@ -43,7 +40,7 @@ import java.text.SimpleDateFormat;
 public class TicketUI extends javax.swing.JFrame {
 
     /**
-     * Creates new form TicketUI
+     * Creates new form TicketUII
      */
     private ArrayList<Ticket> t = new ArrayList<>();
     DefaultTableModel model;
@@ -52,6 +49,7 @@ public class TicketUI extends javax.swing.JFrame {
         this.setLocationRelativeTo(null);
         model = (DefaultTableModel) jTable1.getModel();
     }
+
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -62,7 +60,9 @@ public class TicketUI extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">
     private void initComponents() {
 
+        jButton2 = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
+        jButton3 = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
         jLabel2 = new javax.swing.JLabel();
@@ -72,12 +72,25 @@ public class TicketUI extends javax.swing.JFrame {
         jButton1 = new javax.swing.JButton();
         jLabel4 = new javax.swing.JLabel();
         txtCode = new javax.swing.JTextField();
-        jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
+        jButton4 = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+
+        jButton2.setText("Edit");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
 
         jLabel1.setText("Ticket");
+
+        jButton3.setText("Save");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
                 new Object [][] {
@@ -120,17 +133,10 @@ public class TicketUI extends javax.swing.JFrame {
             }
         });
 
-        jButton2.setText("Edit");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
+        jButton4.setText("Sort");
+        jButton4.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
-            }
-        });
-
-        jButton3.setText("Save");
-        jButton3.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton3ActionPerformed(evt);
+                jButton4ActionPerformed(evt);
             }
         });
 
@@ -160,13 +166,15 @@ public class TicketUI extends javax.swing.JFrame {
                                                         .addGroup(layout.createSequentialGroup()
                                                                 .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)
                                                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                                                .addComponent(txtCode, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                                                .addComponent(txtCode, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                        .addGroup(layout.createSequentialGroup()
+                                                                .addComponent(jButton3)
+                                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                                .addComponent(jButton4))))
                                         .addGroup(layout.createSequentialGroup()
                                                 .addGap(99, 99, 99)
-                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                                        .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                                        .addComponent(jButton3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 69, Short.MAX_VALUE)
+                                                .addComponent(jButton2)))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 87, Short.MAX_VALUE)
                                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 472, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(68, 68, 68))
         );
@@ -196,46 +204,16 @@ public class TicketUI extends javax.swing.JFrame {
                                                         .addComponent(txtCode, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                                                 .addGap(18, 18, 18)
                                                 .addComponent(jButton2)
-                                                .addGap(39, 39, 39)
-                                                .addComponent(jButton3)))
-                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                                .addGap(38, 38, 38)
+                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                                        .addComponent(jButton3)
+                                                        .addComponent(jButton4))))
+                                .addContainerGap(22, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>
 
-    private void txtSeatActionPerformed(java.awt.event.ActionEvent evt) {
-        // TODO add your handling code here:
-    }
-
-    private void txtPriceActionPerformed(java.awt.event.ActionEvent evt) {
-        // TODO add your handling code here:
-    }
-
-    private void txtCodeActionPerformed(java.awt.event.ActionEvent evt) {
-        // TODO add your handling code here:
-    }
-    //add
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {
-        // TODO add your handling code here:
-        Ticket tik = new Ticket();
-        tik.setSeatType(txtSeat.getText());
-        tik.setPrice(txtPrice.getText());
-        t.add(tik);
-        showResult();
-    }
-    int i=1;
-    public void showResult() {
-        Ticket tik = t.get(t.size()-1);
-        tik.setCode(i++);
-        model.addRow(new Object[] {
-                tik.getCode(),
-                tik.getSeatType(),
-                tik.getPrice()
-
-        });
-    }
-    //edit
     private int findCustomerIndexByCode(int code) {
         System.out.println("Looking for code: " + code);
         for (int i = 0; i < t.size(); i++) {
@@ -259,7 +237,7 @@ public class TicketUI extends javax.swing.JFrame {
         if (indexToEdit != -1) {
             Ticket tik = t.get(indexToEdit);
             tik.setSeatType(txtSeat.getText());
-            tik.setPrice(txtPrice.getText());
+            tik.setPrice(Integer.parseInt(txtPrice.getText()));
             // Update the list
             t.set(indexToEdit, tik);
 
@@ -277,13 +255,12 @@ public class TicketUI extends javax.swing.JFrame {
         // If the Customer with the given code is found, update the corresponding row in the table
         if (rowIndex != -1) {
             Ticket tik = t.get(rowIndex);
-            model.setValueAt(tik.getCode(), rowIndex, 0);
+            String tmp = String.format("%03d", tik.getCode());
+            model.setValueAt(tmp, rowIndex, 0);
             model.setValueAt(tik.getSeatType(), rowIndex, 1);
             model.setValueAt(tik.getPrice(), rowIndex, 2);
         }
     }
-
-    //save
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {
         // TODO add your handling code here:
         JFileChooser fileChooser = new JFileChooser();
@@ -315,9 +292,72 @@ public class TicketUI extends javax.swing.JFrame {
 
     }
 
-    /**
-     * @param args the command line arguments
-     */
+    private void txtSeatActionPerformed(java.awt.event.ActionEvent evt) {
+        // TODO add your handling code here:
+    }
+
+    private void txtPriceActionPerformed(java.awt.event.ActionEvent evt) {
+        // TODO add your handling code here:
+    }
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {
+        // TODO add your handling code here:
+        Ticket tik = new Ticket();
+        tik.setSeatType(txtSeat.getText());
+        tik.setPrice(Integer.parseInt(txtPrice.getText()));
+        t.add(tik);
+        showResult();
+    }
+    int i=1;
+    public void showResult() {
+        Ticket tik = t.get(t.size()-1);
+        tik.setCode(i++);
+        String tmp = String.format("%03d", tik.getCode());
+        model.addRow(new Object[] {
+                tmp,
+                tik.getSeatType(),
+                tik.getPrice()
+
+        });
+    }
+    private void txtCodeActionPerformed(java.awt.event.ActionEvent evt) {
+        // TODO add your handling code here:
+    }
+
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {
+        // TODO add your handling code here:
+        Collections.sort(t, new Comparator<Ticket>() {
+            @Override
+            public int compare(Ticket ticket1, Ticket ticket2) {
+                // Compare tickets based on their prices
+                return Integer.compare(ticket1.getPrice(), ticket2.getPrice());
+            }
+        });
+
+        // Now your ArrayList t is sorted by price
+        // Update the table to reflect the sorted data
+        updateTable();
+
+    }
+
+    private void updateTable() {
+        // Clear the existing rows in the table model
+        model.setRowCount(0);
+
+        // Iterate over the sorted tickets and add them to the table
+        for (Ticket tik : t) {
+            String tmp = String.format("%03d", tik.getCode());
+            model.addRow(new Object[] {
+                    tmp,
+                    tik.getSeatType(),
+                    tik.getPrice()
+            });
+        }
+    }
+
+//    /**
+//     * @param args the command line arguments
+//     */
     public void runCode() {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
@@ -354,6 +394,7 @@ public class TicketUI extends javax.swing.JFrame {
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
+    private javax.swing.JButton jButton4;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
