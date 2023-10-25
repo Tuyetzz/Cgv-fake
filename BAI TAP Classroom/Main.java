@@ -133,13 +133,13 @@ public class Main extends javax.swing.JFrame {
     }// </editor-fold>
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {
-        NewJFrame1 frame = new NewJFrame1();
-        frame.runCode();
-
+        NewJFrame1 frame1 = new NewJFrame1();
+        frame1.runCode();
     }
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {
-        // TODO add your handling code here:
+        TicketUI frame2 = new TicketUI();
+        frame2.runCode();
     }
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {
