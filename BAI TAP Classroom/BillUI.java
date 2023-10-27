@@ -77,7 +77,7 @@ public class BillUI extends javax.swing.JFrame {
         sortTotal = new javax.swing.JButton();
         jLabel8 = new javax.swing.JLabel();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 
         jLabel1.setText("Customer Code");
 
@@ -250,7 +250,7 @@ public class BillUI extends javax.swing.JFrame {
         bill.setnTicket(Integer.parseInt(txtNum.getText()));
         bill.setSeatType(txtSeatType.getText());
         if(bill.getnTicket() > 5) {
-            System.out.println("Cant buy 5 tickets a day");
+            JOptionPane.showMessageDialog(this, "Can't buy more than 5 tickets a day", "Error", JOptionPane.ERROR_MESSAGE);
         }
         else {
             b.add(bill);

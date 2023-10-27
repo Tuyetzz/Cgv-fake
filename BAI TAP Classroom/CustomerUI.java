@@ -76,7 +76,7 @@ public class CustomerUI extends javax.swing.JFrame {
         jButton2 = new javax.swing.JButton();
         jComboBox1 = new javax.swing.JComboBox<>();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 
         jButton3.setText("Save");
         jButton3.addActionListener(new java.awt.event.ActionListener() {
