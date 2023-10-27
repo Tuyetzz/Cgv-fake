@@ -106,7 +106,7 @@ public class BillUI extends javax.swing.JFrame {
 
                 },
                 new String [] {
-                        "Customer Code", "Buy date", "Seat type", "number of tickets"
+                        "Customer Code", "Buy date", "Seat type", "Number of tickets", "Price"
                 }
         ));
         jScrollPane1.setViewportView(jTable1);
@@ -160,7 +160,7 @@ public class BillUI extends javax.swing.JFrame {
                                                         .addGroup(layout.createSequentialGroup()
                                                                 .addGap(113, 113, 113)
                                                                 .addComponent(addButton)))
-                                                .addGap(0, 41, Short.MAX_VALUE))
+                                                .addGap(0, 43, Short.MAX_VALUE))
                                         .addGroup(layout.createSequentialGroup()
                                                 .addGap(128, 128, 128)
                                                 .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -249,9 +249,10 @@ public class BillUI extends javax.swing.JFrame {
         }
         bill.setnTicket(Integer.parseInt(txtNum.getText()));
         bill.setSeatType(txtSeatType.getText());
-        if (bill.getnTicket() > 5) {
-            JOptionPane.showMessageDialog(this, "Can't buy more than 5 tickets a day", "Error", JOptionPane.ERROR_MESSAGE);
-        } else {
+        if(bill.getnTicket() > 5) {
+            System.out.println("Cant buy 5 tickets a day");
+        }
+        else {
             b.add(bill);
             showResult();
         }
@@ -266,11 +267,33 @@ public class BillUI extends javax.swing.JFrame {
                 bill.getnTicket()
         });
     }
-
     private void sortDateActionPerformed(java.awt.event.ActionEvent evt) {
         // TODO add your handling code here:
-    }
+        Collections.sort(b, new Comparator<Bill>() {
+            @Override
+            public int compare(Bill bill1, Bill bill2) {
+                return bill1.getBuy().compareTo(bill2.getBuy());
+            }
+        });
 
+        // After sorting, update the table to reflect the new order
+        updateTable();
+    }
+    private void updateTable() {
+        // Clear the existing rows in the table
+        model.setRowCount(0);
+
+        // Add the sorted Bills to the table model
+        for (Bill bill : b) {
+            String tmp = String.format("%05d", bill.getcusCode());
+            model.addRow(new Object[] {
+                    tmp,
+                    bill.getBuy(),
+                    bill.getSeatType(),
+                    bill.getnTicket()
+            });
+        }
+    }
     private void sortTotalActionPerformed(java.awt.event.ActionEvent evt) {
         // TODO add your handling code here:
     }

@@ -133,7 +133,7 @@ public class Main extends javax.swing.JFrame {
         pack();
     }// </editor-fold>
 
-    NewJFrame1 frame1 = new NewJFrame1();
+    CustomerUI frame1 = new CustomerUI();
     TicketUI frame2 = new TicketUI();
     BillUI frame3 = new BillUI();
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {

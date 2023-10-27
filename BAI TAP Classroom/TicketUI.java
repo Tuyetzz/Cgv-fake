@@ -1,5 +1,10 @@
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
+
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 //package com.mycompany.netbeanstest2;
@@ -43,14 +48,16 @@ public class TicketUI extends javax.swing.JFrame {
      * Creates new form TicketUII
      */
     private ArrayList<Ticket> t = new ArrayList<>();
+    private ArrayList<Ticket> t1 = new ArrayList<>();
     private Map<String, Integer> mp = new HashMap<>();
+    private Map<String, Integer> mp1 = new HashMap<>();
     DefaultTableModel model;
+
     public TicketUI() {
         initComponents();
         this.setLocationRelativeTo(null);
         model = (DefaultTableModel) jTable1.getModel();
     }
-
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -94,10 +101,8 @@ public class TicketUI extends javax.swing.JFrame {
         });
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
-                new Object [][] {
-
-                },
-                new String [] {
+                new Object[][]{},
+                new String[]{
                         "Code", "Seat Type", "Price"
                 }
         ));
@@ -225,6 +230,7 @@ public class TicketUI extends javax.swing.JFrame {
         }
         return -1; // Customer not found
     }
+
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {
         // TODO add your handling code here:
         // Get the code of the customer you want to edit
@@ -250,6 +256,7 @@ public class TicketUI extends javax.swing.JFrame {
             System.out.println("Customer with code " + codeToEdit + " not found.");
         }
     }
+
     public void editResult(int code) {
         int rowIndex = findCustomerIndexByCode(code);
 
@@ -257,11 +264,31 @@ public class TicketUI extends javax.swing.JFrame {
         if (rowIndex != -1) {
             Ticket tik = t.get(rowIndex);
             String tmp = String.format("%03d", tik.getCode());
+
+            String seatType = txtSeat.getText();
+            int price = Integer.parseInt(txtPrice.getText());
+
+            // Check if the seat type already has a price
+            if (mp1.containsKey(seatType)) {
+                System.out.println("Cannot edit because SeatType exist!");
+            } else {
+                // Seat type doesn't exist, add a new ticket
+
+                tik.setSeatType(seatType);
+                tik.setPrice(price);
+                t1.add(tik);
+                showResult();
+
+                // Add the seat type and price to the map
+                mp1.put(seatType, price);
+            }
+
             model.setValueAt(tmp, rowIndex, 0);
             model.setValueAt(tik.getSeatType(), rowIndex, 1);
             model.setValueAt(tik.getPrice(), rowIndex, 2);
         }
     }
+
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {
         // TODO add your handling code here:
         JFileChooser fileChooser = new JFileChooser();
@@ -322,18 +349,20 @@ public class TicketUI extends javax.swing.JFrame {
         }
 
     }
-    int i=1;
+    int i = 1;
+
     public void showResult() {
-        Ticket tik = t.get(t.size()-1);
+        Ticket tik = t.get(t.size() - 1);
         tik.setCode(i++);
         String tmp = String.format("%03d", tik.getCode());
-        model.addRow(new Object[] {
+        model.addRow(new Object[]{
                 tmp,
                 tik.getSeatType(),
                 tik.getPrice()
 
         });
     }
+
     private void txtCodeActionPerformed(java.awt.event.ActionEvent evt) {
         // TODO add your handling code here:
     }
@@ -361,7 +390,7 @@ public class TicketUI extends javax.swing.JFrame {
         // Iterate over the sorted tickets and add them to the table
         for (Ticket tik : t) {
             String tmp = String.format("%03d", tik.getCode());
-            model.addRow(new Object[] {
+            model.addRow(new Object[]{
                     tmp,
                     tik.getSeatType(),
                     tik.getPrice()
@@ -369,7 +398,7 @@ public class TicketUI extends javax.swing.JFrame {
         }
     }
 
-//    /**
+    //    /**
 //     * @param args the command line arguments
 //     */
     public void runCode() {
