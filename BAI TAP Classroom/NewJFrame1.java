@@ -284,8 +284,9 @@ public class NewJFrame1 extends javax.swing.JFrame {
     public void showResult() {
         Customer cus = c.get(c.size()-1);
         cus.setCode(i++);
+        String tmp = String.format("%05d", cus.getCode());
         model.addRow(new Object[] {
-                cus.getCode(),
+                tmp,
                 cus.getFirstName(),
                 cus.getLastName(),
                 cus.getBirth(),
@@ -299,7 +300,8 @@ public class NewJFrame1 extends javax.swing.JFrame {
         // If the Customer with the given code is found, update the corresponding row in the table
         if (rowIndex != -1) {
             Customer cus = c.get(rowIndex);
-            model.setValueAt(cus.getCode(), rowIndex, 0);
+            String tmp = String.format("%05d", cus.getCode());
+            model.setValueAt(tmp, rowIndex, 0);
             model.setValueAt(cus.getFirstName(), rowIndex, 1);
             model.setValueAt(cus.getLastName(), rowIndex, 2);
             model.setValueAt(cus.getBirth(), rowIndex, 3);

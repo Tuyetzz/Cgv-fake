@@ -1,19 +1,14 @@
 public class Ticket {
-    private int code;
-    private String seatType, price;
+    private int code, price;
+    private String seatType;
     Ticket() {
 
     }
-    Ticket(String seatType , String price) {
-        this.code++;
-        this.seatType = seatType;
-        this.price = price;
-    }
 
-    public String getPrice() {
+    public int getPrice() {
         return price;
     }
-    public void setPrice(String price) {
+    public void setPrice(int price) {
         this.price = price;
     }
 

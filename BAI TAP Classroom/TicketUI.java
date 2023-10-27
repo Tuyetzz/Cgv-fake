@@ -43,6 +43,7 @@ public class TicketUI extends javax.swing.JFrame {
      * Creates new form TicketUII
      */
     private ArrayList<Ticket> t = new ArrayList<>();
+    private Map<String, Integer> mp = new HashMap<>();
     DefaultTableModel model;
     public TicketUI() {
         initComponents();
@@ -302,11 +303,24 @@ public class TicketUI extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {
         // TODO add your handling code here:
-        Ticket tik = new Ticket();
-        tik.setSeatType(txtSeat.getText());
-        tik.setPrice(Integer.parseInt(txtPrice.getText()));
-        t.add(tik);
-        showResult();
+        String seatType = txtSeat.getText();
+        int price = Integer.parseInt(txtPrice.getText());
+
+        // Check if the seat type already has a price
+        if (mp.containsKey(seatType)) {
+            System.out.println("The seat type already exist!");
+        } else {
+            // Seat type doesn't exist, add a new ticket
+            Ticket tik = new Ticket();
+            tik.setSeatType(seatType);
+            tik.setPrice(price);
+            t.add(tik);
+            showResult();
+
+            // Add the seat type and price to the map
+            mp.put(seatType, price);
+        }
+
     }
     int i=1;
     public void showResult() {

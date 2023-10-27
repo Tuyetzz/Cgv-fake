@@ -5,7 +5,7 @@
 
 // Press Shift twice to open the Search Everywhere dialog and type `show whitespaces`,
 // then press Enter. You can now see whitespace characters in your code.
-
+//package com.mycompany.netbeanstest2;
 import java.awt.*;
 import java.awt.Color;
 import java.awt.event.ActionListener;
@@ -47,6 +47,7 @@ public class Main extends javax.swing.JFrame {
      */
     public Main() {
         initComponents();
+
     }
 
     /**
@@ -132,18 +133,23 @@ public class Main extends javax.swing.JFrame {
         pack();
     }// </editor-fold>
 
+    NewJFrame1 frame1 = new NewJFrame1();
+    TicketUI frame2 = new TicketUI();
+    BillUI frame3 = new BillUI();
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {
-        NewJFrame1 frame1 = new NewJFrame1();
+
         frame1.runCode();
     }
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {
-        TicketUI frame2 = new TicketUI();
+
         frame2.runCode();
     }
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {
         // TODO add your handling code here:
+
+        frame3.runCode();
     }
 
     /**
@@ -176,7 +182,9 @@ public class Main extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Main().setVisible(true);
+                Main mframe = new Main();
+                mframe.setVisible(true);
+                mframe.setLocationRelativeTo(null);
             }
         });
     }
