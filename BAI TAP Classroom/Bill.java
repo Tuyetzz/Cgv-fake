@@ -1,11 +1,11 @@
 //package com.mycompany.netbeanstest2;
 import java.util.Date;
 
-public class Bill extends Ticket{
+public class Bill {
     private int cusCode;
     private Date buy;
     private int nTicket;
-
+    private String seatType;
 
     public int getcusCode() {
         return cusCode;
@@ -29,5 +29,13 @@ public class Bill extends Ticket{
 
     public void setnTicket(int nTicket) {
         this.nTicket = nTicket;
+    }
+
+    public String getSeatType() {
+        return seatType;
+    }
+
+    public void setSeatType(String seatType) {
+        this.seatType = seatType;
     }
 }

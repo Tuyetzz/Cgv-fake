@@ -31,6 +31,11 @@ import javax.imageio.ImageIO;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
+import java.io.BufferedOutputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
+
 //import java.math.BigInteger;
 //import java.util.Stack;
 /**
@@ -208,34 +213,36 @@ public class CustomerUI extends javax.swing.JFrame {
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         // TODO add your handling code here:
-        JFileChooser fileChooser = new JFileChooser();
-
-        // Show a "Save" dialog
-        int userSelection = fileChooser.showSaveDialog(this);
-
-        if (userSelection == JFileChooser.APPROVE_OPTION) {
-            File fileToSave = fileChooser.getSelectedFile();
-
-            try (BufferedWriter writer = new BufferedWriter(new FileWriter(fileToSave))) {
-                // Write the table data to the file
-                for (int row = 0; row < model.getRowCount(); row++) {
-                    for (int col = 0; col < model.getColumnCount(); col++) {
-                        writer.write(model.getValueAt(row, col).toString());
-                        if (col < model.getColumnCount() - 1) {
-                            writer.write(",");
-                        }
-                    }
-                    writer.newLine();
-                }
-
-                JOptionPane.showMessageDialog(this, "Table data saved successfully!");
-            } catch (IOException e) {
-                e.printStackTrace();
-                JOptionPane.showMessageDialog(this, "Error saving table data: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-            }
-        }
+        saveToCSV("Customer.csv");
     }//GEN-LAST:event_jButton3ActionPerformed
+    private void saveToCSV(String filePath) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath))) {
+            // Write the header
+            for (int col = 0; col < jTable1.getColumnCount(); col++) {
+                writer.write(jTable1.getColumnName(col));
+                if (col < jTable1.getColumnCount() - 1) {
+                    writer.write(",");
+                }
+            }
+            writer.newLine();
 
+            // Write the data
+            for (int row = 0; row < jTable1.getRowCount(); row++) {
+                for (int col = 0; col < jTable1.getColumnCount(); col++) {
+                    writer.write(jTable1.getValueAt(row, col).toString());
+                    if (col < jTable1.getColumnCount() - 1) {
+                        writer.write(",");
+                    }
+                }
+                writer.newLine();
+            }
+
+            JOptionPane.showMessageDialog(this, "Data saved successfully!");
+        } catch (IOException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Error saving data: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
         Customer cus = new Customer();

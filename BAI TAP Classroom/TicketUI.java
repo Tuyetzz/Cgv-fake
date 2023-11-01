@@ -101,8 +101,10 @@ public class TicketUI extends javax.swing.JFrame {
         });
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
-                new Object[][]{},
-                new String[]{
+                new Object [][] {
+
+                },
+                new String [] {
                         "Code", "Seat Type", "Price"
                 }
         ));
@@ -139,7 +141,7 @@ public class TicketUI extends javax.swing.JFrame {
             }
         });
 
-        jButton4.setText("Sort");
+        jButton4.setText("Sort by Price");
         jButton4.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton4ActionPerformed(evt);
@@ -160,27 +162,28 @@ public class TicketUI extends javax.swing.JFrame {
                                                 .addComponent(jButton1))
                                         .addGroup(layout.createSequentialGroup()
                                                 .addGap(42, 42, 42)
-                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                                        .addGroup(layout.createSequentialGroup()
-                                                                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                                .addGap(29, 29, 29)
-                                                                .addComponent(txtSeat, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                                        .addGroup(layout.createSequentialGroup()
-                                                                .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                                                .addComponent(txtPrice, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                                        .addGroup(layout.createSequentialGroup()
-                                                                .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                                                .addComponent(txtCode, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                                                .addGroup(layout.createSequentialGroup()
+                                                                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                                        .addGap(29, 29, 29)
+                                                                        .addComponent(txtSeat, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                                .addGroup(layout.createSequentialGroup()
+                                                                        .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                                        .addComponent(txtPrice, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                                .addGroup(layout.createSequentialGroup()
+                                                                        .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                                        .addComponent(txtCode, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)))
                                                         .addGroup(layout.createSequentialGroup()
                                                                 .addComponent(jButton3)
-                                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                                .addGap(29, 29, 29)
                                                                 .addComponent(jButton4))))
                                         .addGroup(layout.createSequentialGroup()
                                                 .addGap(99, 99, 99)
                                                 .addComponent(jButton2)))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 87, Short.MAX_VALUE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 71, Short.MAX_VALUE)
                                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 472, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(68, 68, 68))
         );
@@ -232,8 +235,7 @@ public class TicketUI extends javax.swing.JFrame {
     }
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {
-        // TODO add your handling code here:
-        // Get the code of the customer you want to edit
+
         int codeToEdit = Integer.parseInt(txtCode.getText());
         System.out.println("Parsed code to edit: " + codeToEdit);
 
@@ -243,6 +245,7 @@ public class TicketUI extends javax.swing.JFrame {
         // If the customer is found, update its details
         if (indexToEdit != -1) {
             Ticket tik = t.get(indexToEdit);
+            
             tik.setSeatType(txtSeat.getText());
             tik.setPrice(Integer.parseInt(txtPrice.getText()));
             // Update the list
@@ -268,21 +271,6 @@ public class TicketUI extends javax.swing.JFrame {
             String seatType = txtSeat.getText();
             int price = Integer.parseInt(txtPrice.getText());
 
-            // Check if the seat type already has a price
-            if (mp1.containsKey(seatType)) {
-                System.out.println("Cannot edit because SeatType exist!");
-            } else {
-                // Seat type doesn't exist, add a new ticket
-
-                tik.setSeatType(seatType);
-                tik.setPrice(price);
-                t1.add(tik);
-                showResult();
-
-                // Add the seat type and price to the map
-                mp1.put(seatType, price);
-            }
-
             model.setValueAt(tmp, rowIndex, 0);
             model.setValueAt(tik.getSeatType(), rowIndex, 1);
             model.setValueAt(tik.getPrice(), rowIndex, 2);
@@ -291,33 +279,35 @@ public class TicketUI extends javax.swing.JFrame {
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {
         // TODO add your handling code here:
-        JFileChooser fileChooser = new JFileChooser();
-
-        // Show a "Save" dialog
-        int userSelection = fileChooser.showSaveDialog(this);
-
-        if (userSelection == JFileChooser.APPROVE_OPTION) {
-            File fileToSave = fileChooser.getSelectedFile();
-
-            try (BufferedWriter writer = new BufferedWriter(new FileWriter(fileToSave))) {
-                // Write the table data to the file
-                for (int row = 0; row < model.getRowCount(); row++) {
-                    for (int col = 0; col < model.getColumnCount(); col++) {
-                        writer.write(model.getValueAt(row, col).toString());
-                        if (col < model.getColumnCount() - 1) {
-                            writer.write(",");
-                        }
-                    }
-                    writer.newLine();
+        saveToCSV("Ticket.csv");
+    }
+    private void saveToCSV(String filePath) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath))) {
+            // Write the header
+            for (int col = 0; col < jTable1.getColumnCount(); col++) {
+                writer.write(jTable1.getColumnName(col));
+                if (col < jTable1.getColumnCount() - 1) {
+                    writer.write(",");
                 }
-
-                JOptionPane.showMessageDialog(this, "Table data saved successfully!");
-            } catch (IOException e) {
-                e.printStackTrace();
-                JOptionPane.showMessageDialog(this, "Error saving table data: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             }
-        }
+            writer.newLine();
 
+            // Write the data
+            for (int row = 0; row < jTable1.getRowCount(); row++) {
+                for (int col = 0; col < jTable1.getColumnCount(); col++) {
+                    writer.write(jTable1.getValueAt(row, col).toString());
+                    if (col < jTable1.getColumnCount() - 1) {
+                        writer.write(",");
+                    }
+                }
+                writer.newLine();
+            }
+
+            JOptionPane.showMessageDialog(this, "Data saved successfully!");
+        } catch (IOException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Error saving data: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     private void txtSeatActionPerformed(java.awt.event.ActionEvent evt) {
@@ -356,9 +346,9 @@ public class TicketUI extends javax.swing.JFrame {
         tik.setCode(i++);
         String tmp = String.format("%03d", tik.getCode());
         model.addRow(new Object[]{
-                tmp,
-                tik.getSeatType(),
-                tik.getPrice()
+            tmp,
+            tik.getSeatType(),
+            tik.getPrice()
 
         });
     }
@@ -391,14 +381,14 @@ public class TicketUI extends javax.swing.JFrame {
         for (Ticket tik : t) {
             String tmp = String.format("%03d", tik.getCode());
             model.addRow(new Object[]{
-                    tmp,
-                    tik.getSeatType(),
-                    tik.getPrice()
+                tmp,
+                tik.getSeatType(),
+                tik.getPrice()
             });
         }
     }
 
-    //    /**
+//    /**
 //     * @param args the command line arguments
 //     */
     public void runCode() {
