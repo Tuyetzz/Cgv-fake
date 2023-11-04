@@ -262,8 +262,6 @@ public class TicketUI extends javax.swing.JFrame {
 
     public void editResult(int code) {
         int rowIndex = findCustomerIndexByCode(code);
-
-        // If the Customer with the given code is found, update the corresponding row in the table
         if (rowIndex != -1) {
             Ticket tik = t.get(rowIndex);
             String tmp = String.format("%03d", tik.getCode());

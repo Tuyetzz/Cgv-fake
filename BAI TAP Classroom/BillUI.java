@@ -44,6 +44,7 @@ public class BillUI extends javax.swing.JFrame {
      */
     private ArrayList<Bill> b = new ArrayList<>();
     DefaultTableModel model;
+    private Map<String, Integer> seatTypePriceMap = new HashMap<>();
     public BillUI() {
         initComponents();
         this.setLocationRelativeTo(null);
@@ -258,15 +259,70 @@ public class BillUI extends javax.swing.JFrame {
         }
     }
     public void showResult() {
-        Bill bill = b.get(b.size()-1);
+        // Initialize the Seat Type to Price map
+        Map<String, Integer> seatTypePriceMap = initializeSeatTypePriceMap();
+
+        Bill bill = b.get(b.size() - 1);
         String tmp = String.format("%05d", bill.getcusCode());
-        model.addRow(new Object[] {
-                tmp,
-                bill.getBuy(),
-                bill.getSeatType(),
-                bill.getnTicket()
-        });
+
+        // Get the Price for the Seat Type from the map
+        int seatTypePrice = seatTypePriceMap.getOrDefault(bill.getSeatType(), -1);
+
+        // Print seat type and map entries for troubleshooting
+        System.out.println("Seat Type: " + bill.getSeatType());
+        System.out.println("Seat Type to Price Map: " + seatTypePriceMap);
+
+        // Check if the Price is a valid integer
+        if (seatTypePrice != -1) {
+            // Calculate the Total Price using the Seat Type Price and the number of tickets
+            int totalPrice = seatTypePrice * bill.getnTicket();
+
+            model.addRow(new Object[]{
+                    tmp,
+                    bill.getBuy(),
+                    bill.getSeatType(),
+                    bill.getnTicket(),
+                    totalPrice // Add the Total Price to the table
+            });
+        } else {
+            // Handle the case where the Price is not a valid integer
+            System.out.println("Warning: Unable to parse price for seat type " + bill.getSeatType());
+        }
     }
+
+    private Map<String, Integer> initializeSeatTypePriceMap() {
+        Map<String, Integer> seatTypePriceMap = new HashMap<>();
+
+        // Read the CSV file and populate the map, skipping the first line
+        try (BufferedReader reader = new BufferedReader(new FileReader("Ticket.csv"))) {
+            String line;
+            boolean isFirstLine = true;
+            while ((line = reader.readLine()) != null) {
+                if (isFirstLine) {
+                    // Skip the first line (header)
+                    isFirstLine = false;
+                    continue;
+                }
+
+                String[] parts = line.split(",");
+                if (parts.length >= 3) {
+                    String seatType = parts[1].trim(); // Assuming Seat Type is at index 1
+                    try {
+                        int price = Integer.parseInt(parts[2].trim()); // Assuming Price is at index 2
+                        seatTypePriceMap.put(seatType, price);
+                    } catch (NumberFormatException e) {
+                        System.out.println("Error parsing Price as an integer: " + e.getMessage());
+                    }
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return seatTypePriceMap;
+    }
+
+
     private void sortDateActionPerformed(java.awt.event.ActionEvent evt) {
         // TODO add your handling code here:
         Collections.sort(b, new Comparator<Bill>() {
