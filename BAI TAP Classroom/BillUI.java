@@ -342,16 +342,49 @@ public class BillUI extends javax.swing.JFrame {
         // Add the sorted Bills to the table model
         for (Bill bill : b) {
             String tmp = String.format("%05d", bill.getcusCode());
+            int totalPrice = getSeatTypePrice(bill) * bill.getnTicket();
+
             model.addRow(new Object[] {
                     tmp,
                     bill.getBuy(),
                     bill.getSeatType(),
-                    bill.getnTicket()
+                    bill.getnTicket(),
+                    totalPrice
             });
         }
     }
     private void sortTotalActionPerformed(java.awt.event.ActionEvent evt) {
         // TODO add your handling code here:
+        Comparator<Bill> totalPriceComparator = Comparator.comparingInt(bill -> {
+            int seatTypePrice = initializeSeatTypePriceMap().getOrDefault(bill.getSeatType(), -1);
+            if (seatTypePrice != -1) {
+                return seatTypePrice * bill.getnTicket();
+            } else {
+                // Handle the case where the Price is not a valid integer
+                System.out.println("Warning: Unable to parse price for seat type " + bill.getSeatType());
+                return 0;
+            }
+        });
+
+        // Sort the ArrayList using the custom comparator
+        Collections.sort(b, totalPriceComparator);
+
+        // After sorting, update the table to reflect the changes
+        updateTable();
+    }
+
+    private int getSeatTypePrice(Bill bill) {
+        // Get the Price for the Seat Type from the map
+        int seatTypePrice = initializeSeatTypePriceMap().getOrDefault(bill.getSeatType(), -1);
+
+        // Check if the Price is a valid integer
+        if (seatTypePrice != -1) {
+            return seatTypePrice;
+        } else {
+            // Handle the case where the Price is not a valid integer
+            System.out.println("Warning: Unable to parse price for seat type " + bill.getSeatType());
+            return 0;
+        }
     }
 
 //    /**
