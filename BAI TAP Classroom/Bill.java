@@ -1,4 +1,3 @@
-//package com.mycompany.netbeanstest2;
 import java.util.Date;
 
 public class Bill {
@@ -6,6 +5,7 @@ public class Bill {
     private Date buy;
     private int nTicket;
     private String seatType;
+    private int price;
 
     public int getcusCode() {
         return cusCode;
@@ -37,5 +37,13 @@ public class Bill {
 
     public void setSeatType(String seatType) {
         this.seatType = seatType;
+    }
+
+    public void setPrice(int price) {
+        this.price = price;
+    }
+
+    public int getPrice() {
+        return price;
     }
 }

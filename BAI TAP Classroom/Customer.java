@@ -7,9 +7,7 @@ public class Customer {
     Customer() {
 
     }
-
     //ten
-
     public String getFirstName() {
         return firstName;
     }
@@ -26,13 +24,14 @@ public class Customer {
         this.lastName = lastName;
     }
 
-    //code
+    //ma
     public int getCode() {
         return code;
     }
     public void setCode(int code) {
         this.code = code;
     }
+
     //birth
     public Date getBirth() {
         return birth;
@@ -40,12 +39,11 @@ public class Customer {
     public void setBirth(Date birth) {
         this.birth = birth;
     }
-    //type
 
+    //type
     public String getType() {
         return type;
     }
-
     public void setType(String type) {
         this.type = type;
     }

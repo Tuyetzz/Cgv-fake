@@ -222,18 +222,39 @@ public class TicketUI extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>
+    //nut add
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {
+        // TODO add your handling code here:
+        String seatType = txtSeat.getText();
+        int price = Integer.parseInt(txtPrice.getText());
 
-    private int findCustomerIndexByCode(int code) {
-        System.out.println("Looking for code: " + code);
-        for (int i = 0; i < t.size(); i++) {
-            System.out.println("Customer at index " + i + " has code: " + t.get(i).getCode());
-            if (t.get(i).getCode() == code) {
-                return i;
-            }
+        // Ktra xem da ton tai chua
+        if (mp.containsKey(seatType)) {
+            System.out.println("The seat type already exist!");
+        } else {
+            // neu chua ton tai -> them
+            Ticket tik = new Ticket();
+            tik.setSeatType(seatType);
+            tik.setPrice(price);
+            t.add(tik);
+            showResult();
+            mp.put(seatType, price);
         }
-        return -1; // Customer not found
+    }
+    int i = 1;
+    public void showResult() {
+        Ticket tik = t.get(t.size() - 1);
+        tik.setCode(i++);
+        String tmp = String.format("%03d", tik.getCode());
+        model.addRow(new Object[]{
+                tmp,
+                tik.getSeatType(),
+                tik.getPrice()
+
+        });
     }
 
+    //nut edit
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {
 
         int codeToEdit = Integer.parseInt(txtCode.getText());
@@ -256,7 +277,7 @@ public class TicketUI extends javax.swing.JFrame {
 
         } else {
             // Handle the case where the customer with the given code is not found
-            System.out.println("Customer with code " + codeToEdit + " not found.");
+            JOptionPane.showMessageDialog(this, "Ticket with code: " + codeToEdit +" not found." , "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
 
@@ -274,14 +295,22 @@ public class TicketUI extends javax.swing.JFrame {
             model.setValueAt(tik.getPrice(), rowIndex, 2);
         }
     }
-
+    private int findCustomerIndexByCode(int code) {
+        for (int i = 0; i < t.size(); i++) {
+            if (t.get(i).getCode() == code) {
+                return i;
+            }
+        }
+        return -1; // ko tim dc
+    }
+    //nut save
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {
         // TODO add your handling code here:
         saveToCSV("Ticket.csv");
     }
     private void saveToCSV(String filePath) {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath))) {
-            // Write the header
+            // ten
             for (int col = 0; col < jTable1.getColumnCount(); col++) {
                 writer.write(jTable1.getColumnName(col));
                 if (col < jTable1.getColumnCount() - 1) {
@@ -290,7 +319,7 @@ public class TicketUI extends javax.swing.JFrame {
             }
             writer.newLine();
 
-            // Write the data
+            // data
             for (int row = 0; row < jTable1.getRowCount(); row++) {
                 for (int col = 0; col < jTable1.getColumnCount(); col++) {
                     writer.write(jTable1.getValueAt(row, col).toString());
@@ -316,41 +345,6 @@ public class TicketUI extends javax.swing.JFrame {
         // TODO add your handling code here:
     }
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {
-        // TODO add your handling code here:
-        String seatType = txtSeat.getText();
-        int price = Integer.parseInt(txtPrice.getText());
-
-        // Check if the seat type already has a price
-        if (mp.containsKey(seatType)) {
-            System.out.println("The seat type already exist!");
-        } else {
-            // Seat type doesn't exist, add a new ticket
-            Ticket tik = new Ticket();
-            tik.setSeatType(seatType);
-            tik.setPrice(price);
-            t.add(tik);
-            showResult();
-
-            // Add the seat type and price to the map
-            mp.put(seatType, price);
-        }
-
-    }
-    int i = 1;
-
-    public void showResult() {
-        Ticket tik = t.get(t.size() - 1);
-        tik.setCode(i++);
-        String tmp = String.format("%03d", tik.getCode());
-        model.addRow(new Object[]{
-            tmp,
-            tik.getSeatType(),
-            tik.getPrice()
-
-        });
-    }
-
     private void txtCodeActionPerformed(java.awt.event.ActionEvent evt) {
         // TODO add your handling code here:
     }
@@ -360,22 +354,16 @@ public class TicketUI extends javax.swing.JFrame {
         Collections.sort(t, new Comparator<Ticket>() {
             @Override
             public int compare(Ticket ticket1, Ticket ticket2) {
-                // Compare tickets based on their prices
+                // tra ve
                 return Integer.compare(ticket1.getPrice(), ticket2.getPrice());
             }
         });
-
-        // Now your ArrayList t is sorted by price
-        // Update the table to reflect the sorted data
         updateTable();
-
     }
 
     private void updateTable() {
-        // Clear the existing rows in the table model
+        // Xoa toan bo di viet lai
         model.setRowCount(0);
-
-        // Iterate over the sorted tickets and add them to the table
         for (Ticket tik : t) {
             String tmp = String.format("%03d", tik.getCode());
             model.addRow(new Object[]{

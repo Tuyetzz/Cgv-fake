@@ -44,7 +44,6 @@ public class BillUI extends javax.swing.JFrame {
      */
     private ArrayList<Bill> b = new ArrayList<>();
     DefaultTableModel model;
-    private Map<String, Integer> seatTypePriceMap = new HashMap<>();
     public BillUI() {
         initComponents();
         this.setLocationRelativeTo(null);
@@ -238,7 +237,7 @@ public class BillUI extends javax.swing.JFrame {
     private void txtSeatTypeActionPerformed(java.awt.event.ActionEvent evt) {
         // TODO add your handling code here:
     }
-
+    //them
     private void addButtonActionPerformed(java.awt.event.ActionEvent evt) {
         // TODO add your handling code here:
         Bill bill = new Bill();
@@ -250,65 +249,60 @@ public class BillUI extends javax.swing.JFrame {
         }
         bill.setnTicket(Integer.parseInt(txtNum.getText()));
         bill.setSeatType(txtSeatType.getText());
-        if(bill.getnTicket() > 5) {
+        if (bill.getnTicket() > 5) {
             JOptionPane.showMessageDialog(this, "Can't buy more than 5 tickets a day", "Error", JOptionPane.ERROR_MESSAGE);
         }
         else {
-            b.add(bill);
-            showResult();
+            Map<String, Integer> seatTypePriceMap = initializeSeatTypePriceMap();
+
+            // Lay gia cua tung seat type
+            int seatTypePrice = seatTypePriceMap.getOrDefault(bill.getSeatType(), -1);
+
+            // check
+            System.out.println("Seat Type: " + bill.getSeatType());
+            System.out.println("Seat Type to Price Map: " + seatTypePriceMap);
+
+            // ktra
+            if (seatTypePrice != -1) {
+                // tinh gia tien (so luong ghe * so tien)
+                int totalPrice = seatTypePrice * bill.getnTicket();
+                bill.setPrice(totalPrice);
+
+                b.add(bill);
+
+                String tmp = String.format("%05d", bill.getcusCode());
+                model.addRow(new Object[]{
+                        tmp,
+                        bill.getBuy(),
+                        bill.getSeatType(),
+                        bill.getnTicket(),
+                        bill.getPrice()
+                });
+            }
+            else {
+                // Handle the case where the Price is not a valid integer
+                System.out.println("Warning: Unable to parse price for seat type " + bill.getSeatType());
+            }
         }
     }
-    public void showResult() {
-        // Initialize the Seat Type to Price map
-        Map<String, Integer> seatTypePriceMap = initializeSeatTypePriceMap();
-
-        Bill bill = b.get(b.size() - 1);
-        String tmp = String.format("%05d", bill.getcusCode());
-
-        // Get the Price for the Seat Type from the map
-        int seatTypePrice = seatTypePriceMap.getOrDefault(bill.getSeatType(), -1);
-
-        // Print seat type and map entries for troubleshooting
-        System.out.println("Seat Type: " + bill.getSeatType());
-        System.out.println("Seat Type to Price Map: " + seatTypePriceMap);
-
-        // Check if the Price is a valid integer
-        if (seatTypePrice != -1) {
-            // Calculate the Total Price using the Seat Type Price and the number of tickets
-            int totalPrice = seatTypePrice * bill.getnTicket();
-
-            model.addRow(new Object[]{
-                    tmp,
-                    bill.getBuy(),
-                    bill.getSeatType(),
-                    bill.getnTicket(),
-                    totalPrice // Add the Total Price to the table
-            });
-        } else {
-            // Handle the case where the Price is not a valid integer
-            System.out.println("Warning: Unable to parse price for seat type " + bill.getSeatType());
-        }
-    }
-
+    //doc file csv vua luu
     private Map<String, Integer> initializeSeatTypePriceMap() {
         Map<String, Integer> seatTypePriceMap = new HashMap<>();
-
-        // Read the CSV file and populate the map, skipping the first line
         try (BufferedReader reader = new BufferedReader(new FileReader("Ticket.csv"))) {
             String line;
+            //bo qua hang dau
             boolean isFirstLine = true;
             while ((line = reader.readLine()) != null) {
                 if (isFirstLine) {
-                    // Skip the first line (header)
                     isFirstLine = false;
                     continue;
                 }
 
                 String[] parts = line.split(",");
                 if (parts.length >= 3) {
-                    String seatType = parts[1].trim(); // Assuming Seat Type is at index 1
+                    String seatType = parts[1].trim(); // Seat Type tai cot 1
                     try {
-                        int price = Integer.parseInt(parts[2].trim()); // Assuming Price is at index 2
+                        int price = Integer.parseInt(parts[2].trim()); //  Price tai cot 2
                         seatTypePriceMap.put(seatType, price);
                     } catch (NumberFormatException e) {
                         System.out.println("Error parsing Price as an integer: " + e.getMessage());
@@ -323,6 +317,7 @@ public class BillUI extends javax.swing.JFrame {
     }
 
 
+    //nut sap xep ngay
     private void sortDateActionPerformed(java.awt.event.ActionEvent evt) {
         // TODO add your handling code here:
         Collections.sort(b, new Comparator<Bill>() {
@@ -331,15 +326,10 @@ public class BillUI extends javax.swing.JFrame {
                 return bill1.getBuy().compareTo(bill2.getBuy());
             }
         });
-
-        // After sorting, update the table to reflect the new order
         updateTable();
     }
     private void updateTable() {
-        // Clear the existing rows in the table
         model.setRowCount(0);
-
-        // Add the sorted Bills to the table model
         for (Bill bill : b) {
             String tmp = String.format("%05d", bill.getcusCode());
             int totalPrice = getSeatTypePrice(bill) * bill.getnTicket();
@@ -353,38 +343,23 @@ public class BillUI extends javax.swing.JFrame {
             });
         }
     }
-    private void sortTotalActionPerformed(java.awt.event.ActionEvent evt) {
-        // TODO add your handling code here:
-        Comparator<Bill> totalPriceComparator = Comparator.comparingInt(bill -> {
-            int seatTypePrice = initializeSeatTypePriceMap().getOrDefault(bill.getSeatType(), -1);
-            if (seatTypePrice != -1) {
-                return seatTypePrice * bill.getnTicket();
-            } else {
-                // Handle the case where the Price is not a valid integer
-                System.out.println("Warning: Unable to parse price for seat type " + bill.getSeatType());
-                return 0;
-            }
-        });
-
-        // Sort the ArrayList using the custom comparator
-        Collections.sort(b, totalPriceComparator);
-
-        // After sorting, update the table to reflect the changes
-        updateTable();
-    }
-
     private int getSeatTypePrice(Bill bill) {
-        // Get the Price for the Seat Type from the map
         int seatTypePrice = initializeSeatTypePriceMap().getOrDefault(bill.getSeatType(), -1);
-
-        // Check if the Price is a valid integer
+        // ktra ben tren
         if (seatTypePrice != -1) {
             return seatTypePrice;
-        } else {
-            // Handle the case where the Price is not a valid integer
+        }
+        else {
             System.out.println("Warning: Unable to parse price for seat type " + bill.getSeatType());
             return 0;
         }
+    }
+    //nut sap xep theo gia tien
+    private void sortTotalActionPerformed(java.awt.event.ActionEvent evt) {
+        // TODO add your handling code here:
+        Comparator<Bill> totalPriceComparator = Comparator.comparingInt(Bill::getPrice);
+        Collections.sort(b, totalPriceComparator);
+        updateTable();
     }
 
 //    /**

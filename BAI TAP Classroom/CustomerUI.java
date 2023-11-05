@@ -44,9 +44,7 @@ import java.io.ObjectOutputStream;
  */
 public class CustomerUI extends javax.swing.JFrame {
 
-    /**
-     * Creates new form CustomerUI
-     */
+    //Tao 1 arraylist dung du lieu
     private ArrayList<Customer> c = new ArrayList<>();
     DefaultTableModel model;
     public CustomerUI() {
@@ -211,22 +209,23 @@ public class CustomerUI extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    //nut save
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         // TODO add your handling code here:
         saveToCSV("Customer.csv");
     }//GEN-LAST:event_jButton3ActionPerformed
     private void saveToCSV(String filePath) {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath))) {
-            // Write the header
+            // Viet header
             for (int col = 0; col < jTable1.getColumnCount(); col++) {
-                writer.write(jTable1.getColumnName(col));
+                writer.write(jTable1.getColumnName(col));  //lay ten cot
                 if (col < jTable1.getColumnCount() - 1) {
-                    writer.write(",");
+                    writer.write(",");      //cuoi cung thi khong ghi dau phay
                 }
             }
             writer.newLine();
 
-            // Write the data
+            // Viet data
             for (int row = 0; row < jTable1.getRowCount(); row++) {
                 for (int col = 0; col < jTable1.getColumnCount(); col++) {
                     writer.write(jTable1.getValueAt(row, col).toString());
@@ -243,6 +242,8 @@ public class CustomerUI extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Error saving data: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
+
+    //nut add
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
         Customer cus = new Customer();
@@ -263,46 +264,21 @@ public class CustomerUI extends javax.swing.JFrame {
     public void showResult() {
         Customer cus = c.get(c.size()-1);
         cus.setCode(i++);
-        String tmp = String.format("%05d", cus.getCode());
+        String tmp = String.format("%05d", cus.getCode());  //them so 0
         model.addRow(new Object[] {
                 tmp,
                 cus.getFirstName(),
                 cus.getLastName(),
                 cus.getBirth(),
                 cus.getType()
-
         });
     }
-    public void editResult(int code) {
-        int rowIndex = findCustomerIndexByCode(code);
-
-        // If the Customer with the given code is found, update the corresponding row in the table
-        if (rowIndex != -1) {
-            Customer cus = c.get(rowIndex);
-            String tmp = String.format("%05d", cus.getCode());
-            model.setValueAt(tmp, rowIndex, 0);
-            model.setValueAt(cus.getFirstName(), rowIndex, 1);
-            model.setValueAt(cus.getLastName(), rowIndex, 2);
-            model.setValueAt(cus.getBirth(), rowIndex, 3);
-            model.setValueAt(cus.getType(), rowIndex, 4);
-        }
-    }
-    private int findCustomerIndexByCode(int code) {
-        System.out.println("Looking for code: " + code);
-        for (int i = 0; i < c.size(); i++) {
-            System.out.println("Customer at index " + i + " has code: " + c.get(i).getCode());
-            if (c.get(i).getCode() == code) {
-                return i;
-            }
-        }
-        return -1; // Customer not found
-    }
+    //nut sua lai
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
         int codeToEdit = Integer.parseInt(txtCode.getText());
-        System.out.println("Parsed code to edit: " + codeToEdit);
 
-        // Find the index of the customer in the list
+        // Tim thu tu
         int indexToEdit = findCustomerIndexByCode(codeToEdit);
 
         // If the customer is found, update its details
@@ -318,29 +294,45 @@ public class CustomerUI extends javax.swing.JFrame {
                 ex.printStackTrace();
             }
 
-            // Update the list
+            // Sua lai lít
             c.set(indexToEdit, cus);
 
-            // Update the table
+            // sua table
             editResult(codeToEdit);
 
-            for (Customer customer : c) {
-                System.out.println("Customer code in the list: " + customer.getCode());
-            }
 
         } else {
             // Handle the case where the customer with the given code is not found
-            System.out.println("Customer with code " + codeToEdit + " not found.");
+            JOptionPane.showMessageDialog(this, "Customer with code: " + codeToEdit +" not found." , "Error", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_jButton2ActionPerformed
 
+    public void editResult(int code) {
+        int rowIndex = findCustomerIndexByCode(code);
+
+        // If the Customer with the given code is found, update the corresponding row in the table
+        if (rowIndex != -1) {
+            Customer cus = c.get(rowIndex);
+            String tmp = String.format("%05d", cus.getCode());
+            model.setValueAt(tmp, rowIndex, 0);
+            model.setValueAt(cus.getFirstName(), rowIndex, 1);
+            model.setValueAt(cus.getLastName(), rowIndex, 2);
+            model.setValueAt(cus.getBirth(), rowIndex, 3);
+            model.setValueAt(cus.getType(), rowIndex, 4);
+        }
+    }
+    private int findCustomerIndexByCode(int code) {
+        for (int i = 0; i < c.size(); i++) {
+            if (c.get(i).getCode() == code) {
+                return i;
+            }
+        }
+        return -1; //ko tim dc
+    }
     private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jComboBox1ActionPerformed
 
-//    /**
-//     * @param args the command line arguments
-//     */
     public void runCode() {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
