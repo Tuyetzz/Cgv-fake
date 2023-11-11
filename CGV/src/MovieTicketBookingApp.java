@@ -15,6 +15,7 @@ public class MovieTicketBookingApp {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(1000, 700); // Kích thước lớn hơn để chứa 8 ô phim
 
+        frame.setLocationRelativeTo(null);
         // Tạo JPanel để chứa các phim với GridLayout
         JPanel moviePanelLeft = new JPanel(new GridLayout(0, 1)); // 1 cột, số hàng tùy ý
         JPanel moviePanelRight = new JPanel(new GridLayout(0, 1)); // 1 cột, số hàng tùy ý
@@ -83,7 +84,8 @@ public class MovieTicketBookingApp {
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     // Create an instance of CinemaTicketBookingApp
-                    CinemaTicketBookingApp d = new CinemaTicketBookingApp();
+                    TicketUI t = new TicketUI();
+                    t.runCode();
                     // Call a method or perform any action on the CinemaTicketBookingApp instance
                     // Example: d.someMethod();
                     closeCurrentFrame();

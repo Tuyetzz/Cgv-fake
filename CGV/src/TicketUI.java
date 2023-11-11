@@ -87,7 +87,149 @@ public class TicketUI extends javax.swing.JFrame {
                 color[i] = Color.WHITE;
             }
         }
+        updateButtonColorsFromCSV();
+        readDataFromCSV();
     }
+    private void readDataFromCSV() {
+        // Read data from CSV and populate jTable1
+        String csvFile = "Ticket.csv";
+        String line;
+        String csvSplitBy = ",";
+
+        try (BufferedReader br = new BufferedReader(new FileReader(csvFile))) {
+            // Skip the first line (header)
+            br.readLine();
+
+            while ((line = br.readLine()) != null) {
+                String[] data = line.split(csvSplitBy);
+                model.addRow(data);
+                // Assuming seat information is in the third column (index 2)
+                int seat = Integer.parseInt(data[2].trim());
+
+                // Set the corresponding isTaken value to true
+                if (seat >= 1 && seat <= 24) {
+                    isTaken[seat] = true;
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void updateButtonColorsFromCSV() {
+        // Read existing data from Ticket.csv and update button colors
+        String csvFile = "Ticket.csv";
+        String line;
+        String csvSplitBy = ",";
+
+        try (BufferedReader br = new BufferedReader(new FileReader(csvFile))) {
+            while ((line = br.readLine()) != null) {
+                String[] data = line.split(csvSplitBy);
+
+                // Check if there are enough columns and the seat value is a valid integer
+                if (data.length >= 4 && isNumeric(data[2].trim())) {
+                    int seat = Integer.parseInt(data[2].trim());
+                    updateButtonColor(seat);
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    // Helper method to check if a string is a valid integer
+    private static boolean isNumeric(String str) {
+        try {
+            Integer.parseInt(str);
+            return true;
+        } catch (NumberFormatException e) {
+            return false;
+        }
+    }
+    private void updateButtonColor(int seat) {
+        // Update the color of the button based on the seat number
+        if (seat >= 1 && seat <= 24) {
+            isTaken[seat] = true;
+
+            switch (seat) {
+                case 1:
+                    jButton1.setBackground(Color.RED);
+                    break;
+                case 2:
+                    jButton2.setBackground(Color.RED);
+                    break;
+                case 3:
+                    jButton3.setBackground(Color.RED);
+                    break;
+                case 4:
+                    jButton4.setBackground(Color.RED);
+                    break;
+                case 5:
+                    jButton5.setBackground(Color.RED);
+                    break;
+                case 6:
+                    jButton6.setBackground(Color.RED);
+                    break;
+                case 7:
+                    jButton7.setBackground(Color.RED);
+                    break;
+                case 8:
+                    jButton8.setBackground(Color.RED);
+                    break;
+                case 9:
+                    jButton9.setBackground(Color.RED);
+                    break;
+                case 10:
+                    jButton10.setBackground(Color.RED);
+                    break;
+                case 11:
+                    jButton11.setBackground(Color.RED);
+                    break;
+                case 12:
+                    jButton12.setBackground(Color.RED);
+                    break;
+                case 13:
+                    jButton13.setBackground(Color.RED);
+                    break;
+                case 14:
+                    jButton14.setBackground(Color.RED);
+                    break;
+                case 15:
+                    jButton15.setBackground(Color.RED);
+                    break;
+                case 16:
+                    jButton16.setBackground(Color.RED);
+                    break;
+                case 17:
+                    jButton17.setBackground(Color.RED);
+                    break;
+                case 18:
+                    jButton18.setBackground(Color.RED);
+                    break;
+                case 19:
+                    jButton19.setBackground(Color.RED);
+                    break;
+                case 20:
+                    jButton20.setBackground(Color.RED);
+                    break;
+                case 21:
+                    jButton21.setBackground(Color.RED);
+                    break;
+                case 22:
+                    jButton22.setBackground(Color.RED);
+                    break;
+                case 23:
+                    jButton23.setBackground(Color.RED);
+                    break;
+                case 24:
+                    jButton24.setBackground(Color.RED);
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -501,14 +643,22 @@ public class TicketUI extends javax.swing.JFrame {
         });
     }
     private void removeData(int seat) {
-        // Iterate through the table rows and remove the row corresponding to seat 1
+        // Iterate through the table rows and remove the row corresponding to the specified seat
         for (int row = 0; row < model.getRowCount(); row++) {
-            if ((int) model.getValueAt(row, 2) == seat) {  // Assuming seat number is in the third column (index 2)
-                model.removeRow(row);
-                break;
+            try {
+                int seatValue = Integer.parseInt(model.getValueAt(row, 2).toString());
+
+                if (seatValue == seat) {
+                    model.removeRow(row);
+                    break;
+                }
+            } catch (NumberFormatException e) {
+                e.printStackTrace();
+                System.err.println("Error parsing seat value: " + model.getValueAt(row, 2));
             }
         }
     }
+
 
     // <editor-fold defaultstate="collapsed" desc="Button">    
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {
@@ -1026,10 +1176,10 @@ public class TicketUI extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Error saving data: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
+//    /**
+//     * @param args the command line arguments
+//     */
+    public void runCode() {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
