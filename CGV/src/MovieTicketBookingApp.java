@@ -88,7 +88,6 @@ public class MovieTicketBookingApp {
                     t.runCode();
                     // Call a method or perform any action on the CinemaTicketBookingApp instance
                     // Example: d.someMethod();
-                    closeCurrentFrame();
                 }
             });
 
@@ -121,12 +120,6 @@ public class MovieTicketBookingApp {
             } catch (Exception e) {
                 e.printStackTrace();
                 return null;
-            }
-        }
-        private void closeCurrentFrame() {
-            Window window = SwingUtilities.getWindowAncestor(this);
-            if (window instanceof JFrame) {
-                ((JFrame) window).dispose();
             }
         }
     }

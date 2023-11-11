@@ -272,7 +272,7 @@ public class TicketUI extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         txtDate = new javax.swing.JTextField();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 
         jLabel1.setText("Cinema Screen");
 
@@ -620,19 +620,39 @@ public class TicketUI extends javax.swing.JFrame {
     private boolean[] isTaken = new boolean[25];
     private Color[] color = new Color[25];
     private void addData(int price, int seat) {
+        // Check if the name and date fields are empty
+        String name = txtName.getText().trim();
+        String dateString = txtDate.getText().trim();
+
+        if (name.isEmpty() || dateString.isEmpty()) {
+            showErrorPanel("Please enter name and date.");
+            return;
+        }
+
         Ticket tik = new Ticket();
-        tik.setName(txtName.getText());
+        tik.setName(name);
+
         try {
-            tik.setDate(new SimpleDateFormat("dd/MM/yyyy").parse(txtDate.getText()));
+            // Parse the date
+            tik.setDate(new SimpleDateFormat("dd/MM/yyyy").parse(dateString));
         } catch (ParseException ex) {
             ex.printStackTrace();
+            showErrorPanel("Invalid date format. Please enter date in dd/MM/yyyy format.");
+            return;
         }
+
+        // Set other ticket properties
         tik.setPrice(price);
         tik.setSeat(seat);
+
+        // Add the ticket to the list and update the table
         t.add(tik);
         showResult();
     }
 
+    private void showErrorPanel(String message) {
+        JOptionPane.showMessageDialog(this, message, "Error", JOptionPane.ERROR_MESSAGE);
+    }
     public void showResult() {
         Ticket tik = t.get(t.size()-1);
         model.addRow(new Object[] {
