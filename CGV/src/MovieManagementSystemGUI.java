@@ -11,38 +11,6 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
-class Movie {
-    private String title;
-    private int duration;
-    private String imagePath;
-
-    public Movie(String title, int duration) {
-        this.title = title;
-        this.duration = duration;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public int getDuration() {
-        return duration;
-    }
-
-    public String getImagePath() {
-        return imagePath;
-    }
-
-    public void setImagePath(String imagePath) {
-        this.imagePath = imagePath;
-    }
-
-    @Override
-    public String toString() {
-        return "Movie: " + title + " (Duration: " + duration + " minutes)";
-    }
-}
-
 public class MovieManagementSystemGUI {
     private ArrayList<Movie> movieList = new ArrayList<>();
     private DefaultListModel<Movie> movieListModel = new DefaultListModel<>();
@@ -83,7 +51,6 @@ public class MovieManagementSystemGUI {
 
         movieJList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
-        panel.add(new JLabel("Details:"));
         panel.add(detailsTextArea);
         panel.add(imageLabel);
 
@@ -93,7 +60,8 @@ public class MovieManagementSystemGUI {
         chooseImageButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                JFileChooser fileChooser = new JFileChooser();
+                // Xử lý khi nút "Choose Image" được nhấn
+                JFileChooser fileChooser = new JFileChooser("C:\\Users\\Admin\\Desktop\\Code\\Java\\CGV\\img");
                 fileChooser.setFileFilter(new FileNameExtensionFilter("Image files", "jpg", "jpeg", "png", "gif"));
                 int result = fileChooser.showOpenDialog(null);
                 if (result == JFileChooser.APPROVE_OPTION) {
@@ -152,13 +120,15 @@ public class MovieManagementSystemGUI {
             }
         });
 
-        frame.setSize(400, 400);
+        frame.setSize(1400, 800);
         frame.setVisible(true);
+        frame.setLocationRelativeTo(null);
 
         // Thêm một shutdown hook để lưu dữ liệu khi ứng dụng kết thúc
         Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
             public void run() {
-                saveDataToCSV(System.getProperty("user.home") + "/Desktop/movies.csv");
+                String filePath = "C:\\Users\\Admin\\Desktop\\Code\\Java\\CGV\\Movies.csv";
+                saveDataToCSV(filePath);
             }
         }));
     }
