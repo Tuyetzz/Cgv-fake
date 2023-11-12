@@ -49,7 +49,7 @@ public class Login1 extends JFrame {
                     if (username.equals("cinema_employee")) {
     
                         loginFrame.dispose();
-                        openTicketUI();
+                        openMovieTicketBookingApp();
                     } else if (username.equals("cinema_owner")) {
 
                         loginFrame.dispose(); 
@@ -98,11 +98,11 @@ public class Login1 extends JFrame {
         }
     }
 
-    private void openTicketUI() {
+    private void openMovieTicketBookingApp() {
   
         SwingUtilities.invokeLater(() -> {
-            TicketUI ticketUI = new TicketUI();
-            ticketUI.setVisible(true);
+            MovieTicketBookingApp movieTicketBookingApp = new MovieTicketBookingApp();
+            movieTicketBookingApp.setVisible(true);
         });
     }
 
