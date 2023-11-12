@@ -22,7 +22,7 @@ public class Login1 extends JFrame {
     }
 
     private void showLoginWindow() {
-        connectToDatabase(); 
+        connectToDatabase(); // Establish database connection
 
         JFrame loginFrame = new JFrame("Login");
         JPanel loginPanel = new JPanel(new GridLayout(3, 2, 10, 10));
@@ -46,8 +46,18 @@ public class Login1 extends JFrame {
                 char[] password = passwordField.getPassword();
 
                 if (authenticate(username, password)) {
-                    loginFrame.dispose();
-                    initializeMainApp();
+                    if (username.equals("cinema_employee")) {
+    
+                        loginFrame.dispose();
+                        openTicketUI();
+                    } else if (username.equals("cinema_owner")) {
+
+                        loginFrame.dispose(); 
+                        openMovieManagementSystemGUI();
+                    } else {
+                        loginFrame.dispose();
+                        initializeMainApp(); 
+                    }
                 } else {
                     JOptionPane.showMessageDialog(null, "Invalid username or password. Try again.", "Login Failed", JOptionPane.ERROR_MESSAGE);
                 }
@@ -86,6 +96,22 @@ public class Login1 extends JFrame {
             e.printStackTrace();
             return false;
         }
+    }
+
+    private void openTicketUI() {
+  
+        SwingUtilities.invokeLater(() -> {
+            TicketUI ticketUI = new TicketUI();
+            ticketUI.setVisible(true);
+        });
+    }
+
+    private void openMovieManagementSystemGUI() {
+
+        SwingUtilities.invokeLater(() -> {
+            MovieManagementSystemGUI movieManagementSystemGUI = new MovieManagementSystemGUI();
+            movieManagementSystemGUI.setVisible(true);
+        });
     }
 
 }
