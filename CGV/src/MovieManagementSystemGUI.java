@@ -11,7 +11,7 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
-public class MovieManagementSystemGUI extends JFrame {
+public class MovieManagementSystemGUI {
     private ArrayList<Movie> movieList = new ArrayList<>();
     private DefaultListModel<Movie> movieListModel = new DefaultListModel<>();
     private JList<Movie> movieJList = new JList<>(movieListModel);

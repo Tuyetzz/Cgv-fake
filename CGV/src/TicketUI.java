@@ -42,7 +42,7 @@ public class TicketUI extends javax.swing.JFrame {
      */
     //luu du lieu vao 1 mang
     private ArrayList<Ticket> t = new ArrayList<>();
-
+    private int movieIndex;
     DefaultTableModel model;
     //luu gia
     private int[] tiketPrice = new int[25];
@@ -50,7 +50,8 @@ public class TicketUI extends javax.swing.JFrame {
     private boolean[] isTaken = new boolean[25];
     //mau cua nut bam
     private Color[] color = new Color[25];
-    public TicketUI() {
+    public TicketUI(int movieIndex) {
+        this.movieIndex = movieIndex;
         initComponents();
         //cho mau (white = ght thuong) (yellow = ghe vip)
         jButton1.setBackground(Color.WHITE);
@@ -102,7 +103,7 @@ public class TicketUI extends javax.swing.JFrame {
     //ghi mau cac ghe da dc chon tu truoc
     private void readDataFromCSV() {
         // Doc data roi in ra jTable1
-        String csvFile = "Ticket.csv";  //File da co
+        String csvFile = "Ticket" + movieIndex + ".csv";  //File da co
         String line;
         String csvSplitBy = ",";    //Chia du lieu
 
@@ -127,7 +128,7 @@ public class TicketUI extends javax.swing.JFrame {
 
     private void updateButtonColorsFromCSV() {
         // Doc data da co tu Ticket.csv and va doi mau nut bam
-        String csvFile = "Ticket.csv";
+        String csvFile = "Ticket" + movieIndex + ".csv";
         String line;
         String csvSplitBy = ",";
 
@@ -1164,12 +1165,15 @@ public class TicketUI extends javax.swing.JFrame {
         // TODO add your handling code here:
     }
     //nut save (save vao csv)
+
     private void donebuttonActionPerformed(java.awt.event.ActionEvent evt) {
         // TODO add your handling code here:
-//        saveToCSV("Ticket" + i + ".csv");
-        saveToCSV("Ticket.csv");
+        System.out.println("done button "+ movieIndex);
+        saveToCSV("Ticket" + movieIndex + ".csv");
+//        saveToCSV("Ticket.csv");
     }
     private void saveToCSV(String filePath) {
+        System.out.println(movieIndex);
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath))) {
             // ten
             for (int col = 0; col < jTable1.getColumnCount(); col++) {
@@ -1202,6 +1206,7 @@ public class TicketUI extends javax.swing.JFrame {
 //     */
     public void runCode() {
 //    public static void main(String[] args) {
+        System.out.println(movieIndex);
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
@@ -1228,12 +1233,13 @@ public class TicketUI extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new TicketUI().setVisible(true);
+                new TicketUI(movieIndex).setVisible(true);
+                System.out.println(movieIndex);
             }
         });
     }
 
-    // Variables declaration - do not modify                     
+    // Variables declaration - do not modify
     private javax.swing.JButton donebutton;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton10;

@@ -2,13 +2,21 @@ public class Movie {
     private String title;
     private int duration;
     private String imagePath; // Đường dẫn đến hình ảnh đại diện của bộ phim
-
+    private int index;
     public Movie(String title, int duration) {
         this.title = title;
         this.duration = duration;
     }
     public Movie() {
 
+    }
+
+    public int getIndex() {
+        return index;
+    }
+
+    public void setIndex(int index) {
+        this.index = index;
     }
 
     public String getTitle() {

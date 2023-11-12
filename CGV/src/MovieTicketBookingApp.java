@@ -9,12 +9,13 @@ import java.io.IOException;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 
-public class MovieTicketBookingApp extends JFrame {
+public class MovieTicketBookingApp {
+    //list
+    private static ArrayList<Movie> movies = new ArrayList<>();
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> createAndShowGUI());
@@ -37,9 +38,10 @@ public class MovieTicketBookingApp extends JFrame {
         scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 
-        ArrayList<Movie> movies = new ArrayList<>();
+
         String csvFilePath = "C:\\Users\\Admin\\Desktop\\Code\\Java\\CGV\\Movies.csv";
 
+        int cnt=1;
         try (BufferedReader reader = new BufferedReader(new FileReader(csvFilePath))) {
             String line;
             while ((line = reader.readLine()) != null) {
@@ -53,6 +55,7 @@ public class MovieTicketBookingApp extends JFrame {
                     movie.setTitle(title);
                     movie.setDuration(duration);
                     movie.setImagePath(imagePath);
+                    movie.setIndex(cnt++);
 
                     movies.add(movie);
                 }
@@ -64,8 +67,7 @@ public class MovieTicketBookingApp extends JFrame {
         for (int i = 0; i < movies.size(); i++) {
             Movie movie = movies.get(i);
             MovieInfoPanel movieInfoPanel = new MovieInfoPanel(
-                    movie.getTitle(),
-                    Integer.toString(movie.getDuration()),
+                    movie,
                     "10:00 AM",
                     movie.getImagePath(),
                     targetWidth,
@@ -93,7 +95,7 @@ public class MovieTicketBookingApp extends JFrame {
 
     // Lớp để tạo một ô hình chữ nhật chứa thông tin về phim và hình ảnh
     static class MovieInfoPanel extends JPanel {
-        public MovieInfoPanel(String title, String duration, String showtime, String imagePath, int targetWidth, int targetHeight) {
+        public MovieInfoPanel(Movie movie, String showtime, String imagePath, int targetWidth, int targetHeight) {
             setLayout(new BoxLayout(this, BoxLayout.LINE_AXIS));
             setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
 
@@ -104,10 +106,9 @@ public class MovieTicketBookingApp extends JFrame {
             ImageIcon imageIcon = new ImageIcon(image);
             JLabel imageLabel = new JLabel(imageIcon);
 
-            Movie movie = new Movie();
 
             // Tạo JLabel để hiển thị thông tin về phim
-            JLabel movieInfoLabel = new JLabel("<html><b>" + title + "</b><br>Thời lượng: " + duration + "<br>Thời gian chiếu: " + showtime + "</html>");
+            JLabel movieInfoLabel = new JLabel("<html><b>" + movie.getTitle() + "</b><br>Thời lượng: " + movie.getDuration() + "<br>Thời gian chiếu: " + showtime + "</html>");
             movieInfoLabel.setAlignmentX(Component.RIGHT_ALIGNMENT);
             Font infoFont = new Font("Arial", Font.PLAIN, 16); // Tùy chỉnh kích thước chữ ở đây
             movieInfoLabel.setFont(infoFont);
@@ -127,7 +128,7 @@ public class MovieTicketBookingApp extends JFrame {
             bookTicketButton.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    TicketUI ticketUI = new TicketUI();
+                    TicketUI ticketUI = new TicketUI(movie.getIndex());
                     ticketUI.runCode();
                 }
             });
