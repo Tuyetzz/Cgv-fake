@@ -83,9 +83,11 @@ public class MovieManagementSystemGUI {
         frame.add(panel, BorderLayout.NORTH);
         frame.add(new JScrollPane(movieJList), BorderLayout.CENTER);
 
+        // ActionListener cho nút "Choose Image"
         chooseImageButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                // Xử lý khi nút "Choose Image" được nhấn
                 JFileChooser fileChooser = new JFileChooser();
                 fileChooser.setFileFilter(new FileNameExtensionFilter("Image files", "jpg", "jpeg", "png", "gif"));
                 int result = fileChooser.showOpenDialog(null);
@@ -97,9 +99,11 @@ public class MovieManagementSystemGUI {
             }
         });
 
+        // ActionListener cho nút "Add Movie"
         addButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                // Xử lý khi nút "Add Movie" được nhấn
                 String title = titleTextField.getText();
                 int duration = Integer.parseInt(durationTextField.getText());
                 String imagePath = imagePathTextField.getText();
@@ -113,9 +117,11 @@ public class MovieManagementSystemGUI {
             }
         });
 
+        // ActionListener cho nút "Delete Movie"
         deleteButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                // Xử lý khi nút "Delete Movie" được nhấn
                 int selectedIndex = movieJList.getSelectedIndex();
                 if (selectedIndex != -1) {
                     movieList.remove(selectedIndex);
@@ -126,9 +132,11 @@ public class MovieManagementSystemGUI {
             }
         });
 
+        // ListSelectionListener cho JList "movieJList"
         movieJList.addListSelectionListener(new ListSelectionListener() {
             @Override
             public void valueChanged(ListSelectionEvent e) {
+                // Xử lý khi một bộ phim được chọn trong JList
                 int selectedIndex = movieJList.getSelectedIndex();
                 if (selectedIndex != -1) {
                     Movie selectedMovie = movieList.get(selectedIndex);
@@ -142,6 +150,7 @@ public class MovieManagementSystemGUI {
         frame.setVisible(true);
     }
 
+    // Phương thức hiển thị hình ảnh trên JLabel
     private void displayImage(String imagePath) {
         if (imagePath != null && !imagePath.isEmpty()) {
             ImageIcon icon = new ImageIcon(imagePath);
