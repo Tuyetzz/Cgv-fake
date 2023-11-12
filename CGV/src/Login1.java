@@ -18,17 +18,22 @@ public class Login1 extends JFrame {
     }
 
     private void initializeMainApp() {
+        setLayout(new GridLayout(6, 5, 20, 20));
         System.out.println("Main application initialized!");
     }
 
     private void showLoginWindow() {
-        connectToDatabase(); // Establish database connection
+        connectToDatabase(); 
 
         JFrame loginFrame = new JFrame("Login");
-        JPanel loginPanel = new JPanel(new GridLayout(3, 2, 10, 10));
+        JPanel loginPanel = new JPanel(new GridLayout(4, 2, 10, 10));
 
         JTextField usernameField = new JTextField();
         JPasswordField passwordField = new JPasswordField();
+
+  
+        String[] roles = {"Manager", "Employee"};
+        JComboBox<String> roleComboBox = new JComboBox<>(roles);
 
         JButton loginButton = new JButton("Login");
 
@@ -36,6 +41,8 @@ public class Login1 extends JFrame {
         loginPanel.add(usernameField);
         loginPanel.add(new JLabel("Password:"));
         loginPanel.add(passwordField);
+        loginPanel.add(new JLabel("Role:"));
+        loginPanel.add(roleComboBox);
         loginPanel.add(new JLabel()); 
         loginPanel.add(loginButton);
 
@@ -44,19 +51,15 @@ public class Login1 extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 String username = usernameField.getText();
                 char[] password = passwordField.getPassword();
+                String selectedRole = (String) roleComboBox.getSelectedItem();
 
-                if (authenticate(username, password)) {
-                    if (username.equals("cinema_employee")) {
-    
-                        loginFrame.dispose();
-                        openMovieTicketBookingApp();
-                    } else if (username.equals("cinema_owner")) {
+                if (authenticate(username, password, selectedRole)) {
+                    loginFrame.dispose(); 
 
-                        loginFrame.dispose(); 
+                    if ("Manager".equals(selectedRole)) {
                         openMovieManagementSystemGUI();
-                    } else {
-                        loginFrame.dispose();
-                        initializeMainApp(); 
+                    } else if ("Employee".equals(selectedRole)) {
+                        openMovieTicketBookingApp();
                     }
                 } else {
                     JOptionPane.showMessageDialog(null, "Invalid username or password. Try again.", "Login Failed", JOptionPane.ERROR_MESSAGE);
@@ -65,12 +68,11 @@ public class Login1 extends JFrame {
         });
 
         loginFrame.add(loginPanel);
-        loginFrame.setSize(300, 150);
+        loginFrame.setSize(300, 200);
         loginFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         loginFrame.setLocationRelativeTo(null);
         loginFrame.setVisible(true);
     }
-
     private void connectToDatabase() {
         try {
   
@@ -83,34 +85,31 @@ public class Login1 extends JFrame {
             e.printStackTrace();
         }
     }
-
-    private boolean authenticate(String username, char[] password) {
-        String query = "SELECT * FROM users WHERE username = ? AND password = ?";
+    private boolean authenticate(String username, char[] password, String role) {
+        String query = "SELECT * FROM users WHERE username = ? AND password = ? AND role = ?";
         try (PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setString(1, username);
             statement.setString(2, new String(password));
+            statement.setString(3, role);
 
             ResultSet resultSet = statement.executeQuery();
-            return resultSet.next(); 
+            return resultSet.next();
         } catch (SQLException e) {
             e.printStackTrace();
             return false;
         }
     }
-
-    private void openMovieTicketBookingApp() {
-  
-        SwingUtilities.invokeLater(() -> {
-            MovieTicketBookingApp movieTicketBookingApp = new MovieTicketBookingApp();
-            movieTicketBookingApp.setVisible(true);
-        });
-    }
-
     private void openMovieManagementSystemGUI() {
-
         SwingUtilities.invokeLater(() -> {
             MovieManagementSystemGUI movieManagementSystemGUI = new MovieManagementSystemGUI();
             movieManagementSystemGUI.setVisible(true);
+        });
+    }
+
+    private void openMovieTicketBookingApp() {
+        SwingUtilities.invokeLater(() -> {
+            MovieTicketBookingApp movieTicketBookingApp = new MovieTicketBookingApp();
+            movieTicketBookingApp.setVisible(true);
         });
     }
 
