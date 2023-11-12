@@ -40,11 +40,19 @@ public class TicketUI extends javax.swing.JFrame {
     /**
      * Creates new form TicketUI
      */
+    //luu du lieu vao 1 mang
     private ArrayList<Ticket> t = new ArrayList<>();
+
     DefaultTableModel model;
+    //luu gia
     private int[] tiketPrice = new int[25];
+    //ghe da duoc ngoi
+    private boolean[] isTaken = new boolean[25];
+    //mau cua nut bam
+    private Color[] color = new Color[25];
     public TicketUI() {
         initComponents();
+        //cho mau (white = ght thuong) (yellow = ghe vip)
         jButton1.setBackground(Color.WHITE);
         jButton2.setBackground(Color.WHITE);
         jButton3.setBackground(Color.WHITE);
@@ -74,15 +82,16 @@ public class TicketUI extends javax.swing.JFrame {
         jButton23.setBackground(Color.WHITE);
         jButton24.setBackground(Color.WHITE);
 
-        this.setLocationRelativeTo(null);
+        this.setLocationRelativeTo(null);   //bang hien o giua
         model = (DefaultTableModel) jTable1.getModel();
 
         for(int i=1;i<=24;i++) {
-            if((i>7 && i<12) || (i>13 && i<18)) {
+            if ((i > 7 && i < 12) || (i > 13 && i < 18)) {
+                //luu ghe vip
                 tiketPrice[i] = 20;
                 color[i] = Color.YELLOW;
-            }
-            else {
+            } else {
+                //luu ghe thuong
                 tiketPrice[i] = 10;
                 color[i] = Color.WHITE;
             }
@@ -90,23 +99,23 @@ public class TicketUI extends javax.swing.JFrame {
         updateButtonColorsFromCSV();
         readDataFromCSV();
     }
+    //ghi mau cac ghe da dc chon tu truoc
     private void readDataFromCSV() {
-        // Read data from CSV and populate jTable1
-        String csvFile = "Ticket.csv";
+        // Doc data roi in ra jTable1
+        String csvFile = "Ticket.csv";  //File da co
         String line;
-        String csvSplitBy = ",";
+        String csvSplitBy = ",";    //Chia du lieu
 
         try (BufferedReader br = new BufferedReader(new FileReader(csvFile))) {
-            // Skip the first line (header)
+            // bo qua dong dau tien (ten header)
             br.readLine();
 
             while ((line = br.readLine()) != null) {
                 String[] data = line.split(csvSplitBy);
                 model.addRow(data);
-                // Assuming seat information is in the third column (index 2)
+                // So ghe nam o cot thu 3 (tinh theo java la cot 2)
                 int seat = Integer.parseInt(data[2].trim());
-
-                // Set the corresponding isTaken value to true
+                // Dat ghe ngoi thanh da duoc chon
                 if (seat >= 1 && seat <= 24) {
                     isTaken[seat] = true;
                 }
@@ -117,7 +126,7 @@ public class TicketUI extends javax.swing.JFrame {
     }
 
     private void updateButtonColorsFromCSV() {
-        // Read existing data from Ticket.csv and update button colors
+        // Doc data da co tu Ticket.csv and va doi mau nut bam
         String csvFile = "Ticket.csv";
         String line;
         String csvSplitBy = ",";
@@ -126,10 +135,10 @@ public class TicketUI extends javax.swing.JFrame {
             while ((line = br.readLine()) != null) {
                 String[] data = line.split(csvSplitBy);
 
-                // Check if there are enough columns and the seat value is a valid integer
-                if (data.length >= 4 && isNumeric(data[2].trim())) {
+                // Kiem tra xem co du du lieu khong va ghe co phai dang int khong
+                if (data.length >= 4 && isNumber(data[2].trim())) {
                     int seat = Integer.parseInt(data[2].trim());
-                    updateButtonColor(seat);
+                    updateButtonColor(seat);    //doi mau ghe
                 }
             }
         } catch (IOException e) {
@@ -137,8 +146,8 @@ public class TicketUI extends javax.swing.JFrame {
         }
     }
 
-    // Helper method to check if a string is a valid integer
-    private static boolean isNumeric(String str) {
+    //Ktra so
+    private static boolean isNumber(String str) {
         try {
             Integer.parseInt(str);
             return true;
@@ -146,12 +155,15 @@ public class TicketUI extends javax.swing.JFrame {
             return false;
         }
     }
+    //cho ghe thanh mau do
     private void updateButtonColor(int seat) {
-        // Update the color of the button based on the seat number
+        // chuyen ghe thanh da ngoi
         if (seat >= 1 && seat <= 24) {
             isTaken[seat] = true;
 
             switch (seat) {
+                //vi moi button la 1 cai ten khac nhau nen phai lam tung cai mot
+                //co 24 button
                 case 1:
                     jButton1.setBackground(Color.RED);
                     break;
@@ -617,44 +629,43 @@ public class TicketUI extends javax.swing.JFrame {
         pack();
     }// </editor-fold>                        
 
-    private boolean[] isTaken = new boolean[25];
-    private Color[] color = new Color[25];
+    //them du lieu vao bang
     private void addData(int price, int seat) {
-        // Check if the name and date fields are empty
+        //Ten va ngay
         String name = txtName.getText().trim();
         String dateString = txtDate.getText().trim();
-
+        //ktra xem da nhap chua
         if (name.isEmpty() || dateString.isEmpty()) {
             showErrorPanel("Please enter name and date.");
             return;
         }
-
+        //set du lieu
         Ticket tik = new Ticket();
         tik.setName(name);
 
+        //ktra ngay thang roi set
         try {
-            // Parse the date
             tik.setDate(new SimpleDateFormat("dd/MM/yyyy").parse(dateString));
         } catch (ParseException ex) {
             ex.printStackTrace();
             showErrorPanel("Invalid date format. Please enter date in dd/MM/yyyy format.");
             return;
         }
-
-        // Set other ticket properties
+        //set du lieu tu nut bam
         tik.setPrice(price);
         tik.setSeat(seat);
 
-        // Add the ticket to the list and update the table
+        //Them vao array
         t.add(tik);
         showResult();
     }
-
+    //panel loi
     private void showErrorPanel(String message) {
         JOptionPane.showMessageDialog(this, message, "Error", JOptionPane.ERROR_MESSAGE);
     }
     public void showResult() {
         Ticket tik = t.get(t.size()-1);
+        //them hang
         model.addRow(new Object[] {
                 tik.getName(),
                 tik.getDate(),
@@ -662,17 +673,20 @@ public class TicketUI extends javax.swing.JFrame {
                 tik.getPrice()
         });
     }
+    //xoa hang neu xoa ghe
     private void removeData(int seat) {
-        // Iterate through the table rows and remove the row corresponding to the specified seat
         for (int row = 0; row < model.getRowCount(); row++) {
             try {
+                //lay du lieu tu cot thu 3 (2)
                 int seatValue = Integer.parseInt(model.getValueAt(row, 2).toString());
 
                 if (seatValue == seat) {
+                    //neu nut bam mau do(da co trong bang jTable1) thi xoa hang do di
                     model.removeRow(row);
                     break;
                 }
-            } catch (NumberFormatException e) {
+            }
+            catch (NumberFormatException e) {
                 e.printStackTrace();
                 System.err.println("Error parsing seat value: " + model.getValueAt(row, 2));
             }
@@ -685,57 +699,48 @@ public class TicketUI extends javax.swing.JFrame {
         // TODO add your handling code here:
         int price = tiketPrice[1];
         int seat = 1;
-        // Toggle button color based on the current color in the color array
         if (isTaken[1]) {
-            // If the seat is taken, set the original color from the color array
+            // Neu ghe da ngoi -> sua mau thanh mau goc
+            // Xoa du lieu
             jButton1.setBackground(color[1]);
             removeData(seat);
         }
         else {
-            // If the seat is not taken, set the color to red
+            // Neu ghe chua ngoi -> chuyen ghe thanh mau do (bao hieu da co nguoi ngoi)
+            // Them du lieu
             jButton1.setBackground(Color.RED);
             addData(price, seat);
         }
 
-        // Toggle the isTaken value for the corresponding button
+        //Neu dung -> sai con neu sai -> dung
         isTaken[1] = !isTaken[1];
     }
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {
         // TODO add your handling code here:
         int price = tiketPrice[2];
         int seat = 2;
-        // Toggle button color based on the current color in the color array
         if (isTaken[2]) {
-            // If the seat is taken, set the original color from the color array
             jButton2.setBackground(color[2]);
             removeData(seat);
         }
         else {
-            // If the seat is not taken, set the color to red
             jButton2.setBackground(Color.RED);
             addData(price, seat);
         }
-
-        // Toggle the isTaken value for the corresponding button
         isTaken[2] = !isTaken[2];
     }
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {
         // TODO add your handling code here:
         int price = tiketPrice[3];
         int seat = 3;
-        // Toggle button color based on the current color in the color array
         if (isTaken[3]) {
-            // If the seat is taken, set the original color from the color array
             jButton3.setBackground(color[3]);
             removeData(seat);
         }
         else {
-            // If the seat is not taken, set the color to red
             jButton3.setBackground(Color.RED);
             addData(price, seat);
         }
-
-        // Toggle the isTaken value for the corresponding button
         isTaken[3] = !isTaken[3];
     }
 
@@ -743,19 +748,14 @@ public class TicketUI extends javax.swing.JFrame {
         // TODO add your handling code here:
         int price = tiketPrice[4];
         int seat = 4;
-        // Toggle button color based on the current color in the color array
         if (isTaken[4]) {
-            // If the seat is taken, set the original color from the color array
             jButton4.setBackground(color[4]);
             removeData(seat);
         }
         else {
-            // If the seat is not taken, set the color to red
             jButton4.setBackground(Color.RED);
             addData(price, seat);
         }
-
-        // Toggle the isTaken value for the corresponding button
         isTaken[4] = !isTaken[4];
     }
 
@@ -1163,7 +1163,7 @@ public class TicketUI extends javax.swing.JFrame {
     private void txtDateActionPerformed(java.awt.event.ActionEvent evt) {
         // TODO add your handling code here:
     }
-
+    //nut save (save vao csv)
     private void donebuttonActionPerformed(java.awt.event.ActionEvent evt) {
         // TODO add your handling code here:
         saveToCSV("Ticket.csv");
