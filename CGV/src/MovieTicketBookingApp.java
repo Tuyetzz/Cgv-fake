@@ -58,58 +58,6 @@ public class MovieTicketBookingApp {
             e.printStackTrace();
         }
 
-
-//        // Tạo 8 ô hình chữ nhật chứa thông tin về các phim
-//        MovieInfoPanel movie1 = new MovieInfoPanel("Conan: Tàu ngầm sắt màu đen", "1 giờ 30 phút", "10:00 AM", "img/conan.jpg", targetWidth, targetHeight);
-//        MovieInfoPanel movie2 = new MovieInfoPanel("Batman The Dark Knight", "2 giờ", "1:30 PM", "img/batman.jpg", targetWidth, targetHeight);
-//        MovieInfoPanel movie3 = new MovieInfoPanel("Phong ấn quỷ dữ", "2 giờ 15 phút", "4:00 PM", "img/phongan.jpg", targetWidth, targetHeight);
-//        MovieInfoPanel movie4 = new MovieInfoPanel("Cù Lao xác sống", "1 giờ 45 phút", "7:00 PM", "img/culao.jpg", targetWidth, targetHeight);
-//
-//        MovieInfoPanel movie5 = new MovieInfoPanel("Thành phố ngủ gật", "2 giờ 30 phút", "9:00 AM", "img/ngu.jpg", targetWidth, targetHeight);
-//        MovieInfoPanel movie6 = new MovieInfoPanel("Bước chân thép", "1 giờ 55 phút", "1:30 PM", "img/buocchan.jpg", targetWidth, targetHeight);
-//        MovieInfoPanel movie7 = new MovieInfoPanel("Cú máy ăn tiền", "2 giờ 20 phút", "4:00 PM", "img/tien.jpg", targetWidth, targetHeight);
-//        MovieInfoPanel movie8 = new MovieInfoPanel("Thanh gươm trừ tà", "2 giờ 10 phút", "7:30 PM", "img/thanhguom.jpg", targetWidth, targetHeight);
-//
-//        MovieInfoPanel movie9 = new MovieInfoPanel("Conan: Tàu ngầm sắt màu đen", "1 giờ 30 phút", "10:00 AM", "img/conan.jpg", targetWidth, targetHeight);
-//        MovieInfoPanel movie10 = new MovieInfoPanel("Batman The Dark Knight", "2 giờ", "1:30 PM", "img/batman.jpg", targetWidth, targetHeight);
-//        MovieInfoPanel movie11 = new MovieInfoPanel("Phong ấn quỷ dữ", "2 giờ 15 phút", "4:00 PM", "img/phongan.jpg", targetWidth, targetHeight);
-//        MovieInfoPanel movie12 = new MovieInfoPanel("Cù Lao xác sống", "1 giờ 45 phút", "7:00 PM", "img/culao.jpg", targetWidth, targetHeight);
-//        MovieInfoPanel movie13 = new MovieInfoPanel("Conan: Tàu ngầm sắt màu đen", "1 giờ 30 phút", "10:00 AM", "img/conan.jpg", targetWidth, targetHeight);
-//        MovieInfoPanel movie14 = new MovieInfoPanel("Batman The Dark Knight", "2 giờ", "1:30 PM", "img/batman.jpg", targetWidth, targetHeight);
-//        MovieInfoPanel movie15 = new MovieInfoPanel("Phong ấn quỷ dữ", "2 giờ 15 phút", "4:00 PM", "img/phongan.jpg", targetWidth, targetHeight);
-//        MovieInfoPanel movie16 = new MovieInfoPanel("Cù Lao xác sống", "1 giờ 45 phút", "7:00 PM", "img/culao.jpg", targetWidth, targetHeight);
-//        // Thêm 4 ô phim ban đầu vào màn hình bên trái
-//        moviePanelLeft.add(movie1);
-//        moviePanelLeft.add(movie2);
-//        moviePanelLeft.add(movie3);
-//        moviePanelLeft.add(movie4);
-//        moviePanelLeft.add(movie5);
-//        moviePanelLeft.add(movie6);
-//        moviePanelLeft.add(movie7);
-//        moviePanelLeft.add(movie8);
-//
-//        // Thêm 4 ô phim mới vào màn hình bên phải
-//        moviePanelRight.add(movie9);
-//        moviePanelRight.add(movie10);
-//        moviePanelRight.add(movie11);
-//        moviePanelRight.add(movie12);
-//        moviePanelRight.add(movie13);
-//        moviePanelRight.add(movie14);
-//        moviePanelRight.add(movie15);
-//        moviePanelRight.add(movie16);
-
-//        for (int i = 0; i < Math.min(movies.size(), 8); i++) {
-//            Movie movie = movies.get(i);
-//            MovieInfoPanel moviePanel = new MovieInfoPanel(movie.getTitle(), movie.getDuration(), "10:00 AM", movie.getImagePath(), targetWidth, targetHeight);
-//            moviePanelLeft.add(moviePanel);
-//        }
-//
-//        // Tạo 8 ô phim mới vào màn hình bên phải
-//        for (int i = 8; i < Math.min(movies.size(), 16); i++) {
-//            Movie movie = movies.get(i);
-//            MovieInfoPanel moviePanel = new MovieInfoPanel(movie.getTitle(), movie.getDuration(), "10:00 AM", movie.getImagePath(), targetWidth, targetHeight);
-//            moviePanelRight.add(moviePanel);
-//        }
         for (int i = 0; i < movies.size(); i++) {
             Movie movie = movies.get(i);
             MovieInfoPanel movieInfoPanel = new MovieInfoPanel(
@@ -121,12 +69,10 @@ public class MovieTicketBookingApp {
                     targetHeight
             );
 
-            if (i < 4) {
-                // Add the first 8 movies to the left panel
+            if (i <= movies.size()/2-1) {
                 moviePanelLeft.add(movieInfoPanel);
             }
             else {
-                // Add the rest to the right panel
                 moviePanelRight.add(movieInfoPanel);
             }
         }
