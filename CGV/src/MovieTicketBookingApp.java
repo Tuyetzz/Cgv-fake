@@ -17,7 +17,7 @@ public class MovieTicketBookingApp {
     //list
     private static ArrayList<Movie> movies = new ArrayList<>();
 
-    public static void main(String[] args) {
+    public void runCode() {
         SwingUtilities.invokeLater(() -> createAndShowGUI());
     }
 

@@ -102,14 +102,14 @@ public class Login1 extends JFrame {
     private void openMovieManagementSystemGUI() {
         SwingUtilities.invokeLater(() -> {
             MovieManagementSystemGUI movieManagementSystemGUI = new MovieManagementSystemGUI();
-            movieManagementSystemGUI.setVisible(true);
+            movieManagementSystemGUI.runCode();
         });
     }
 
     private void openMovieTicketBookingApp() {
         SwingUtilities.invokeLater(() -> {
             MovieTicketBookingApp movieTicketBookingApp = new MovieTicketBookingApp();
-            movieTicketBookingApp.setVisible(true);
+            movieTicketBookingApp.runCode();
         });
     }
 

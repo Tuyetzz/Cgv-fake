@@ -154,7 +154,7 @@ public class MovieManagementSystemGUI {
         }
     }
 
-    public static void main(String[] args) {
+    public void runCode() {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
