@@ -10,6 +10,9 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
 
 public class MovieTicketBookingApp {
 
@@ -120,6 +123,15 @@ public class MovieTicketBookingApp {
             // Tùy chỉnh font chữ (nếu cần)
             Font buttonFont = new Font("Arial", Font.BOLD, 14);
             bookTicketButton.setFont(buttonFont);
+
+            bookTicketButton.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    TicketUI ticketUI = new TicketUI();
+                    ticketUI.runCode();
+                }
+            });
+
             add(imageLabel);
             add(Box.createRigidArea(new Dimension(0, 10))); // Khoảng cách giữa hình ảnh và thông tin
             add(movieInfoLabel);
