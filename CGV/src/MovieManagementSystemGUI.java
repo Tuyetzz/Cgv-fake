@@ -2,6 +2,10 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
@@ -10,7 +14,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 class Movie {
     private String title;
     private int duration;
-    private String imagePath; // Đường dẫn đến hình ảnh đại diện của bộ phim
+    private String imagePath;
 
     public Movie(String title, int duration) {
         this.title = title;
@@ -74,6 +78,9 @@ public class MovieManagementSystemGUI {
         JButton deleteButton = new JButton("Delete Movie");
         panel.add(deleteButton);
 
+        JButton saveButton = new JButton("Save to CSV");
+        panel.add(saveButton);
+
         movieJList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
         panel.add(new JLabel("Details:"));
@@ -83,11 +90,9 @@ public class MovieManagementSystemGUI {
         frame.add(panel, BorderLayout.NORTH);
         frame.add(new JScrollPane(movieJList), BorderLayout.CENTER);
 
-        // ActionListener cho nút "Choose Image"
         chooseImageButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // Xử lý khi nút "Choose Image" được nhấn
                 JFileChooser fileChooser = new JFileChooser();
                 fileChooser.setFileFilter(new FileNameExtensionFilter("Image files", "jpg", "jpeg", "png", "gif"));
                 int result = fileChooser.showOpenDialog(null);
@@ -99,11 +104,9 @@ public class MovieManagementSystemGUI {
             }
         });
 
-        // ActionListener cho nút "Add Movie"
         addButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // Xử lý khi nút "Add Movie" được nhấn
                 String title = titleTextField.getText();
                 int duration = Integer.parseInt(durationTextField.getText());
                 String imagePath = imagePathTextField.getText();
@@ -117,11 +120,9 @@ public class MovieManagementSystemGUI {
             }
         });
 
-        // ActionListener cho nút "Delete Movie"
         deleteButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // Xử lý khi nút "Delete Movie" được nhấn
                 int selectedIndex = movieJList.getSelectedIndex();
                 if (selectedIndex != -1) {
                     movieList.remove(selectedIndex);
@@ -132,11 +133,16 @@ public class MovieManagementSystemGUI {
             }
         });
 
-        // ListSelectionListener cho JList "movieJList"
+        saveButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                saveDataToCSV(System.getProperty("user.home") + "/Desktop/movies.csv");
+            }
+        });
+
         movieJList.addListSelectionListener(new ListSelectionListener() {
             @Override
             public void valueChanged(ListSelectionEvent e) {
-                // Xử lý khi một bộ phim được chọn trong JList
                 int selectedIndex = movieJList.getSelectedIndex();
                 if (selectedIndex != -1) {
                     Movie selectedMovie = movieList.get(selectedIndex);
@@ -148,9 +154,15 @@ public class MovieManagementSystemGUI {
 
         frame.setSize(400, 400);
         frame.setVisible(true);
+
+        // Thêm một shutdown hook để lưu dữ liệu khi ứng dụng kết thúc
+        Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
+            public void run() {
+                saveDataToCSV(System.getProperty("user.home") + "/Desktop/movies.csv");
+            }
+        }));
     }
 
-    // Phương thức hiển thị hình ảnh trên JLabel
     private void displayImage(String imagePath) {
         if (imagePath != null && !imagePath.isEmpty()) {
             ImageIcon icon = new ImageIcon(imagePath);
@@ -159,6 +171,16 @@ public class MovieManagementSystemGUI {
             imageLabel.setIcon(icon);
         } else {
             imageLabel.setIcon(null);
+        }
+    }
+
+    public void saveDataToCSV(String filePath) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath))) {
+            for (Movie movie : movieList) {
+                writer.write(String.format("%s,%d,%s\n", movie.getTitle(), movie.getDuration(), movie.getImagePath()));
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
