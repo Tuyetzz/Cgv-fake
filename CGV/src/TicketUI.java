@@ -641,38 +641,73 @@ public class TicketUI extends javax.swing.JFrame {
             return;
         }
         //set du lieu
-        Ticket tik = new Ticket();
-        tik.setName(name);
+        VipTicket Vtik = new VipTicket();
+        NormalTicket Ntik = new NormalTicket();
 
-        //ktra ngay thang roi set
-        try {
-            tik.setDate(new SimpleDateFormat("dd/MM/yyyy").parse(dateString));
-        } catch (ParseException ex) {
-            ex.printStackTrace();
-            showErrorPanel("Invalid date format. Please enter date in dd/MM/yyyy format.");
-            return;
+        if((seat > 7 && seat < 11) || (seat > 13 && seat < 18)) {
+            Vtik.setName(name);
+
+            //ktra ngay thang roi set
+            try {
+                Vtik.setDate(new SimpleDateFormat("dd/MM/yyyy").parse(dateString));
+            } catch (ParseException ex) {
+                ex.printStackTrace();
+                showErrorPanel("Invalid date format. Please enter date in dd/MM/yyyy format.");
+                return;
+            }
+            //set du lieu tu nut bam
+            Vtik.setPrice(20);
+            Vtik.setSeat(seat);
+
+            //Them vao array
+            t.add(Vtik);
+            showResult(seat);
         }
-        //set du lieu tu nut bam
-        tik.setPrice(price);
-        tik.setSeat(seat);
+        else {
+            Ntik.setName(name);
 
-        //Them vao array
-        t.add(tik);
-        showResult();
+            //ktra ngay thang roi set
+            try {
+                Ntik.setDate(new SimpleDateFormat("dd/MM/yyyy").parse(dateString));
+            } catch (ParseException ex) {
+                ex.printStackTrace();
+                showErrorPanel("Invalid date format. Please enter date in dd/MM/yyyy format.");
+                return;
+            }
+            //set du lieu tu nut bam
+            Ntik.setPrice(10);
+            Ntik.setSeat(seat);
+
+            //Them vao array
+            t.add(Ntik);
+            showResult(seat);
+        }
     }
     //panel loi
     private void showErrorPanel(String message) {
         JOptionPane.showMessageDialog(this, message, "Error", JOptionPane.ERROR_MESSAGE);
     }
-    public void showResult() {
-        Ticket tik = t.get(t.size()-1);
-        //them hang
-        model.addRow(new Object[] {
-                tik.getName(),
-                tik.getDate(),
-                tik.getSeat(),
-                tik.getPrice()
-        });
+    public void showResult(int seat) {
+        if((seat > 7 && seat < 11) || (seat > 13 && seat < 18)) {
+            VipTicket tik = (VipTicket) t.get(t.size() - 1);
+            //them hang
+            model.addRow(new Object[]{
+                    tik.getName(),
+                    tik.getDate(),
+                    tik.getSeat(),
+                    tik.getPrice()
+            });
+        }
+        else {
+            NormalTicket tik = (NormalTicket) t.get(t.size() - 1);
+            //them hang
+            model.addRow(new Object[]{
+                    tik.getName(),
+                    tik.getDate(),
+                    tik.getSeat(),
+                    tik.getPrice()
+            });
+        }
     }
     //xoa hang neu xoa ghe
     private void removeData(int seat) {

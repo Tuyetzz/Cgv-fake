@@ -7,7 +7,7 @@ import java.util.Date;
 public class Ticket {
     private Date date;
     private String name;
-    private int price;
+//    private int price;
     private int seat;
     Ticket() {
 
@@ -28,13 +28,13 @@ public class Ticket {
         this.name = name;
     }
 
-    public int getPrice() {
-        return price;
-    }
-
-    public void setPrice(int price) {
-        this.price = price;
-    }
+//    public int getPrice() {
+//        return price;
+//    }
+//
+//    public void setPrice(int price) {
+//        this.price = price;
+//    }
 
     public Date getDate() {
         return date;
