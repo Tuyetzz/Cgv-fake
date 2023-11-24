@@ -1,15 +1,47 @@
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.sql.*;
 import java.util.ArrayList;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
+
+class Movie {
+    private String title;
+    private int duration;
+    private String imagePath; // Đường dẫn đến hình ảnh đại diện của bộ phim
+
+    public Movie(String title, int duration) {
+        this.title = title;
+        this.duration = duration;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public int getDuration() {
+        return duration;
+    }
+
+    public String getImagePath() {
+        return imagePath;
+    }
+
+    public void setImagePath(String imagePath) {
+        this.imagePath = imagePath;
+    }
+
+    @Override
+    public String toString() {
+        return "Movie: " + title + " (Duration: " + duration + " minutes)";
+    }
+}
 
 public class MovieManagementSystemGUI {
     private ArrayList<Movie> movieList = new ArrayList<>();
@@ -46,91 +78,65 @@ public class MovieManagementSystemGUI {
         JButton deleteButton = new JButton("Delete Movie");
         panel.add(deleteButton);
 
-        JButton saveButton = new JButton("Save to CSV");
+        JButton saveButton = new JButton("Save to Database");
         panel.add(saveButton);
 
         movieJList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
+        panel.add(new JLabel("Details:"));
         panel.add(detailsTextArea);
         panel.add(imageLabel);
 
         frame.add(panel, BorderLayout.NORTH);
         frame.add(new JScrollPane(movieJList), BorderLayout.CENTER);
 
-        chooseImageButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                // Xử lý khi nút "Choose Image" được nhấn
-                JFileChooser fileChooser = new JFileChooser("C:\\Users\\Admin\\Desktop\\Code\\Java\\CGV\\img");
-                fileChooser.setFileFilter(new FileNameExtensionFilter("Image files", "jpg", "jpeg", "png", "gif"));
-                int result = fileChooser.showOpenDialog(null);
-                if (result == JFileChooser.APPROVE_OPTION) {
-                    String imagePath = fileChooser.getSelectedFile().getAbsolutePath();
-                    imagePathTextField.setText(imagePath);
-                    displayImage(imagePath);
-                }
+        chooseImageButton.addActionListener(e -> {
+            JFileChooser fileChooser = new JFileChooser();
+            fileChooser.setFileFilter(new FileNameExtensionFilter("Image files", "jpg", "jpeg", "png", "gif"));
+            int result = fileChooser.showOpenDialog(null);
+            if (result == JFileChooser.APPROVE_OPTION) {
+                String imagePath = fileChooser.getSelectedFile().getAbsolutePath();
+                imagePathTextField.setText(imagePath);
+                displayImage(imagePath);
             }
         });
 
-        addButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                String title = titleTextField.getText();
-                int duration = Integer.parseInt(durationTextField.getText());
-                String imagePath = imagePathTextField.getText();
-                Movie newMovie = new Movie(title, duration);
-                newMovie.setImagePath(imagePath);
-                movieList.add(newMovie);
-                movieListModel.addElement(newMovie);
-                titleTextField.setText("");
-                durationTextField.setText("");
-                imagePathTextField.setText("");
+        addButton.addActionListener(e -> {
+            String title = titleTextField.getText();
+            int duration = Integer.parseInt(durationTextField.getText());
+            String imagePath = imagePathTextField.getText();
+            Movie newMovie = new Movie(title, duration);
+            newMovie.setImagePath(imagePath);
+            movieList.add(newMovie);
+            movieListModel.addElement(newMovie);
+            titleTextField.setText("");
+            durationTextField.setText("");
+            imagePathTextField.setText("");
+        });
+
+        deleteButton.addActionListener(e -> {
+            int selectedIndex = movieJList.getSelectedIndex();
+            if (selectedIndex != -1) {
+                movieList.remove(selectedIndex);
+                movieListModel.remove(selectedIndex);
+                detailsTextArea.setText("");
+                imageLabel.setIcon(null);
             }
         });
 
-        deleteButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                int selectedIndex = movieJList.getSelectedIndex();
-                if (selectedIndex != -1) {
-                    movieList.remove(selectedIndex);
-                    movieListModel.remove(selectedIndex);
-                    detailsTextArea.setText("");
-                    imageLabel.setIcon(null);
-                }
+        saveButton.addActionListener(e -> saveToDatabase());
+
+        movieJList.addListSelectionListener(e -> {
+            int selectedIndex = movieJList.getSelectedIndex();
+            if (selectedIndex != -1) {
+                Movie selectedMovie = movieList.get(selectedIndex);
+                detailsTextArea.setText(selectedMovie.toString());
+                displayImage(selectedMovie.getImagePath());
             }
         });
 
-        saveButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                saveDataToCSV(System.getProperty("user.home") + "/Desktop/movies.csv");
-            }
-        });
-
-        movieJList.addListSelectionListener(new ListSelectionListener() {
-            @Override
-            public void valueChanged(ListSelectionEvent e) {
-                int selectedIndex = movieJList.getSelectedIndex();
-                if (selectedIndex != -1) {
-                    Movie selectedMovie = movieList.get(selectedIndex);
-                    detailsTextArea.setText(selectedMovie.toString());
-                    displayImage(selectedMovie.getImagePath());
-                }
-            }
-        });
-
-        frame.setSize(1400, 800);
+        frame.setSize(400, 400);
         frame.setVisible(true);
-        frame.setLocationRelativeTo(null);
-
-        // Thêm một shutdown hook để lưu dữ liệu khi ứng dụng kết thúc
-        Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
-            public void run() {
-                String filePath = "C:\\Users\\Admin\\Desktop\\Code\\Java\\CGV\\Movies.csv";
-                saveDataToCSV(filePath);
-            }
-        }));
     }
 
     private void displayImage(String imagePath) {
@@ -144,22 +150,28 @@ public class MovieManagementSystemGUI {
         }
     }
 
-    public void saveDataToCSV(String filePath) {
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath))) {
+    private void saveToDatabase() {
+        String insertQuery = "INSERT INTO movies (title, duration, image_path) VALUES (?, ?, ?)";
+
+        DatabaseMetaData DatabaseConnector = null;
+        try (Connection connection = DatabaseConnector.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(insertQuery)) {
+
             for (Movie movie : movieList) {
-                writer.write(String.format("%s,%d,%s\n", movie.getTitle(), movie.getDuration(), movie.getImagePath()));
+                preparedStatement.setString(1, movie.getTitle());
+                preparedStatement.setInt(2, movie.getDuration());
+                preparedStatement.setString(3, movie.getImagePath());
+                preparedStatement.executeUpdate();
             }
-        } catch (IOException e) {
-            e.printStackTrace();
+
+            JOptionPane.showMessageDialog(null, "Data saved successfully to the database!");
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Error saving data to the database: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
 
-    public void runCode() {
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                new MovieManagementSystemGUI();
-            }
-        });
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(MovieManagementSystemGUI::new);
     }
 }
