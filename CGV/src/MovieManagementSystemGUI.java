@@ -1,47 +1,21 @@
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.sql.*;
 import java.util.ArrayList;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
-
-class Movie {
-    private String title;
-    private int duration;
-    private String imagePath; // Đường dẫn đến hình ảnh đại diện của bộ phim
-
-    public Movie(String title, int duration) {
-        this.title = title;
-        this.duration = duration;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public int getDuration() {
-        return duration;
-    }
-
-    public String getImagePath() {
-        return imagePath;
-    }
-
-    public void setImagePath(String imagePath) {
-        this.imagePath = imagePath;
-    }
-
-    @Override
-    public String toString() {
-        return "Movie: " + title + " (Duration: " + duration + " minutes)";
-    }
-}
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.Properties;
+import java.util.Scanner;
 
 public class MovieManagementSystemGUI {
     private ArrayList<Movie> movieList = new ArrayList<>();
@@ -53,9 +27,18 @@ public class MovieManagementSystemGUI {
     private JLabel imageLabel = new JLabel();
     private JTextArea detailsTextArea = new JTextArea(5, 20);
 
+    public Connection getConnection() throws SQLException {
+        Connection conn = null;
+        Properties connectionProps = new Properties();
+        connectionProps.put("user", "root");
+        connectionProps.put("password", "Hung123456@");
+        conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/employee", connectionProps);
+        return conn;
+    }
     public MovieManagementSystemGUI() {
+
         JFrame frame = new JFrame("Movie Management System");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
         JPanel panel = new JPanel();
         panel.setLayout(new FlowLayout());
@@ -91,7 +74,7 @@ public class MovieManagementSystemGUI {
         frame.add(new JScrollPane(movieJList), BorderLayout.CENTER);
 
         chooseImageButton.addActionListener(e -> {
-            JFileChooser fileChooser = new JFileChooser();
+            JFileChooser fileChooser = new JFileChooser("C:\\Users\\Admin\\Desktop\\Code\\Java\\CGV\\img");
             fileChooser.setFileFilter(new FileNameExtensionFilter("Image files", "jpg", "jpeg", "png", "gif"));
             int result = fileChooser.showOpenDialog(null);
             if (result == JFileChooser.APPROVE_OPTION) {
@@ -124,7 +107,7 @@ public class MovieManagementSystemGUI {
             }
         });
 
-        saveButton.addActionListener(e -> saveToDatabase());
+        saveButton.addActionListener(new SaveButtonListener());
 
         movieJList.addListSelectionListener(e -> {
             int selectedIndex = movieJList.getSelectedIndex();
@@ -135,8 +118,21 @@ public class MovieManagementSystemGUI {
             }
         });
 
-        frame.setSize(400, 400);
+        frame.setSize(1400, 800);
+        frame.setLocationRelativeTo(null);
         frame.setVisible(true);
+    }
+
+    private class SaveButtonListener implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            saveToDatabase();
+            showSuccessMessage();
+        }
+    }
+
+    private void showSuccessMessage() {
+        JOptionPane.showMessageDialog(null, "Save operation successful", "Success", JOptionPane.INFORMATION_MESSAGE);
     }
 
     private void displayImage(String imagePath) {
@@ -153,8 +149,7 @@ public class MovieManagementSystemGUI {
     private void saveToDatabase() {
         String insertQuery = "INSERT INTO movies (title, duration, image_path) VALUES (?, ?, ?)";
 
-        DatabaseMetaData DatabaseConnector = null;
-        try (Connection connection = DatabaseConnector.getConnection();
+        try (Connection connection = getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(insertQuery)) {
 
             for (Movie movie : movieList) {
@@ -173,5 +168,6 @@ public class MovieManagementSystemGUI {
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(MovieManagementSystemGUI::new);
+
     }
 }
