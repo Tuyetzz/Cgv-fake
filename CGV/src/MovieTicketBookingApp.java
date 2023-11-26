@@ -11,58 +11,38 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.DriverManager;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Properties;
 
 
 public class MovieTicketBookingApp {
     //list
     private static ArrayList<Movie> movies = new ArrayList<>();
-
     public void runCode() {
         SwingUtilities.invokeLater(() -> createAndShowGUI());
     }
-
     private static void createAndShowGUI() {
-        // Tạo cửa sổ chính
         JFrame frame = new JFrame("CGV Cinema");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(1400, 800); // Kích thước lớn hơn để chứa 8 ô phim
+        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        frame.setSize(1400, 800);
         frame.setLocationRelativeTo(null);
 
-        // Tạo JPanel để chứa các phim với GridLayout
-        JPanel moviePanelLeft = new JPanel(new GridLayout(0, 1)); // 1 cột, số hàng tùy ý
-        JPanel moviePanelRight = new JPanel(new GridLayout(0, 1)); // 1 cột, số hàng tùy ý
-        int targetWidth = 200; // Kích thước mục tiêu (độ rộng)
-        int targetHeight = 250; // Kích thước mục tiêu (độ cao)
+        JPanel moviePanelLeft = new JPanel(new GridLayout(0, 1));
+        JPanel moviePanelRight = new JPanel(new GridLayout(0, 1));
+        int targetWidth = 200;
+        int targetHeight = 250;
         JPanel moviePanel = new JPanel(new GridLayout(0, 2));
         JScrollPane scrollPane = new JScrollPane(moviePanel);
         scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 
-
-        String csvFilePath = "C:\\Users\\Admin\\Desktop\\Code\\Java\\CGV\\Movies.csv";
-
-        int cnt=1;
-        try (BufferedReader reader = new BufferedReader(new FileReader(csvFilePath))) {
-            String line;
-            while ((line = reader.readLine()) != null) {
-                String[] parts = line.split(",");
-                if (parts.length == 3) {
-                    String title = parts[0].trim();
-                    int duration = Integer.parseInt(parts[1].trim());
-                    String imagePath = parts[2].trim();
-
-                    Movie movie = new Movie();
-                    movie.setTitle(title);
-                    movie.setDuration(duration);
-                    movie.setImagePath(imagePath);
-                    movie.setIndex(cnt++);
-
-                    movies.add(movie);
-                }
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        loadMoviesFromDatabase();
 
         for (int i = 0; i < movies.size(); i++) {
             Movie movie = movies.get(i);
@@ -74,23 +54,54 @@ public class MovieTicketBookingApp {
                     targetHeight
             );
 
-            if (i <= movies.size()/2-1) {
+            if (i % 2 == 0) {
                 moviePanelLeft.add(movieInfoPanel);
-            }
-            else {
+            } else {
                 moviePanelRight.add(movieInfoPanel);
             }
         }
 
-        // Tạo JSplitPane để chia màn hình thành hai bên
         JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, moviePanelLeft, moviePanelRight);
-        splitPane.setDividerLocation(700); // Điều chỉnh vị trí chia màn hình
+        splitPane.setDividerLocation(700);
         splitPane.setAlignmentX(Component.CENTER_ALIGNMENT);
-        // Thêm JSplitPane vào cửa sổ chính
         frame.add(splitPane);
 
-        // Hiển thị cửa sổ
         frame.setVisible(true);
+    }
+
+    private static void loadMoviesFromDatabase() {
+        String query = "SELECT title, duration, image_path FROM movies";
+
+        try (Connection connection = getConnection();
+             PreparedStatement statement = connection.prepareStatement(query);
+             ResultSet resultSet = statement.executeQuery()) {
+
+            int cnt = 1;
+            while (resultSet.next()) {
+                String title = resultSet.getString("title").trim();
+                int duration = resultSet.getInt("duration");
+                String imagePath = resultSet.getString("image_path").trim();
+
+                Movie movie = new Movie();
+                movie.setTitle(title);
+                movie.setDuration(duration);
+                movie.setImagePath(imagePath);
+                movie.setIndex(cnt++);
+
+                movies.add(movie);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static Connection getConnection() throws SQLException {
+        Connection conn = null;
+        Properties connectionProps = new Properties();
+        connectionProps.put("user", "root");
+        connectionProps.put("password", "Hung123456@");
+        conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/employee", connectionProps);
+        return conn;
     }
 
     // Lớp để tạo một ô hình chữ nhật chứa thông tin về phim và hình ảnh
@@ -170,5 +181,9 @@ public class MovieTicketBookingApp {
             }
             return null;
         }
+    }
+    public static void main(String[] args) {
+        MovieTicketBookingApp app = new MovieTicketBookingApp();
+        app.runCode();
     }
 }
