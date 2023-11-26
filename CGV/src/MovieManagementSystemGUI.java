@@ -165,8 +165,8 @@ public class MovieManagementSystemGUI {
             JOptionPane.showMessageDialog(null, "Error saving data to the database: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
-
-    public static void main(String[] args) {
+    public void runCode() {
+//    public static void main(String[] args) {
         SwingUtilities.invokeLater(MovieManagementSystemGUI::new);
 
     }

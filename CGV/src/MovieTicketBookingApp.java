@@ -182,8 +182,4 @@ public class MovieTicketBookingApp {
             return null;
         }
     }
-    public static void main(String[] args) {
-        MovieTicketBookingApp app = new MovieTicketBookingApp();
-        app.runCode();
-    }
 }

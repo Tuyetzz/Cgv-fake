@@ -31,5 +31,4 @@ public class NormalTicket extends Ticket {
                 ", hasDiscount=" + hasDiscount +
                 '}';
     }
-
 }

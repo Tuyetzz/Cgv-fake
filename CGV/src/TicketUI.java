@@ -1243,7 +1243,7 @@ public class TicketUI extends javax.swing.JFrame {
         System.out.println("done button "+ movieIndex);
 
         for (Ticket ticket : t) {
-            System.out.println(ticket);
+            System.out.println(ticket.toString());
             System.out.println("-----------");
         }
         saveToCSV("Ticket" + movieIndex + ".csv");

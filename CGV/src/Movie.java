@@ -10,39 +10,30 @@ public class Movie {
     public Movie() {
 
     }
-
     public int getIndex() {
         return index;
     }
-
     public void setIndex(int index) {
         this.index = index;
     }
-
     public String getTitle() {
         return title;
     }
-
     public void setTitle(String title) {
         this.title = title;
     }
-
     public int getDuration() {
         return duration;
     }
-
     public void setDuration(int duration) {
         this.duration = duration;
     }
-
     public String getImagePath() {
         return imagePath;
     }
-
     public void setImagePath(String imagePath) {
         this.imagePath = imagePath;
     }
-
     @Override
     public String toString() {
         return "Movie: " + title + " (Duration: " + duration + " minutes)";
